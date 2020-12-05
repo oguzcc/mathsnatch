@@ -1,10 +1,13 @@
 const Joi = require("joi");
 const bcrypt = require("bcrypt");
 const _ = require("lodash");
-const { User } = require("../models/user");
+const { User, validate } = require("../models/user");
+const { Avatar } = require("../models/avatar");
 const mongoose = require("mongoose");
 const express = require("express");
 const router = express.Router();
+const auth = require("../middleware/auth");
+const validateObjectId = require("../middleware/validateObjectId");
 
 router.post("/", async (req, res) => {
   const { error } = validate(req.body);
@@ -18,6 +21,29 @@ router.post("/", async (req, res) => {
 
   const token = user.generateAuthToken();
   res.header("x-auth-token", token).send();
+});
+
+router.post("/guest", async (req, res) => {
+  const date = Date.now();
+  const name = "guest" + date.toString();
+  const email = name + "@mathsnatch.com";
+  const password = date.toString();
+  const avatar = "5e4969d45f83cf2170cf7826";
+
+  const user = new User({
+    name: name,
+    email: email,
+    password: password,
+    avatar: avatar,
+  });
+
+  const salt = await bcrypt.genSalt(10);
+  user.password = await bcrypt.hash(password, salt);
+  await user.save();
+  const token = user.generateAuthToken();
+  res
+    .header("x-auth-token", token)
+    .send(_.pick(user, ["_id", "name", "email", "isAdmin", "isGold"]));
 });
 
 function validate(req) {

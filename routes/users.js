@@ -5,7 +5,6 @@ const { User, validate } = require("../models/user");
 const { Avatar } = require("../models/avatar");
 const validateObjectId = require("../middleware/validateObjectId");
 const express = require("express");
-const { boolean } = require("joi");
 const router = express.Router();
 
 router.get("/", [auth], async (req, res) => {
@@ -76,29 +75,6 @@ router.get("/me", [auth], async (req, res) => {
     .header("x-auth-token", token)
     .send(_.pick(user, ["_id", "name", "email", "isAdmin", "isGold"]));
 }); */
-
-router.post("/guest", async (req, res) => {
-  const date = Date.now();
-  const name = "guest" + date.toString();
-  const email = name + "@mathsnatch.com";
-  const password = date.toString();
-  const avatar = "5e4969d45f83cf2170cf7826";
-
-  const user = new User({
-    name: name,
-    email: email,
-    password: password,
-    avatar: avatar,
-  });
-
-  const salt = await bcrypt.genSalt(10);
-  user.password = await bcrypt.hash(password, salt);
-  await user.save();
-  const token = user.generateAuthToken();
-  res
-    .header("x-auth-token", token)
-    .send(_.pick(user, ["_id", "name", "email", "isAdmin", "isGold"]));
-});
 
 router.patch("/:id", [auth, validateObjectId], async (req, res) => {
   if (req.user._id !== req.params.id)
