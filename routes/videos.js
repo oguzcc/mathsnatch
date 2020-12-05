@@ -10,6 +10,19 @@ router.get("/", [auth], async (req, res) => {
   res.send(videos);
 });
 
+router.get("/:videoId", [auth], async (req, res) => {
+  const videoId = req.params.videoId;
+
+  const video = await Video.find({
+    videoId: videoId,
+  }).select("-_id -__v");
+
+  if (!video)
+    return res.status(404).send("The video with the given Id was not found.");
+
+  res.send(video);
+});
+
 router.post("/", [auth, admin], async (req, res) => {
   const { error } = validate(req.body);
   if (error) return res.status(400).send(error.details[0].message);
