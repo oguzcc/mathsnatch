@@ -15,6 +15,10 @@ const topicSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  difficulty: {
+    type: Number,
+    required: true,
+  },
   cards: [cardSchema],
 });
 
@@ -25,6 +29,7 @@ function validateTopic(topic) {
     topicId: Joi.string().min(3).max(3).required(),
     topicName: Joi.string().min(3).max(64).required(),
     topicPic: Joi.string().min(3).required(),
+    difficulty: Joi.number().required(),
     cards: Joi.array(),
   };
 
