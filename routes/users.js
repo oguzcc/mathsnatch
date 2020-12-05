@@ -82,7 +82,7 @@ router.post("/guest", async (req, res) => {
   const name = "guest" + date.toString();
   const email = name + "@mathsnatch.com";
   const password = date.toString();
-  const avatar = "5e4974be5f83cf2170cf7871";
+  const avatar = "5e4969d45f83cf2170cf7826";
 
   const user = new User({
     name: name,
