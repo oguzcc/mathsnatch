@@ -1,6 +1,5 @@
 const Joi = require("joi");
 const mongoose = require("mongoose");
-const { cardSchema } = require("./card");
 
 const topicSchema = new mongoose.Schema({
   topicId: {
@@ -19,7 +18,6 @@ const topicSchema = new mongoose.Schema({
     type: Number,
     required: true,
   },
-  cards: [cardSchema],
 });
 
 const Topic = mongoose.model("Topic", topicSchema);
@@ -30,7 +28,6 @@ function validateTopic(topic) {
     topicName: Joi.string().min(3).max(64).required(),
     topicPic: Joi.string().min(3).required(),
     difficulty: Joi.number().required(),
-    cards: Joi.array(),
   };
 
   return Joi.validate(topic, schema);

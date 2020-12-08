@@ -1,34 +1,27 @@
 const Joi = require("joi");
 const mongoose = require("mongoose");
+const { carddSchema } = require("./cardd");
 
 const cardSchema = new mongoose.Schema({
-  cardId: {
+  topicId: {
     type: String,
     min: 3,
     max: 3,
     required: true,
   },
-  cardName: {
-    type: String,
-    min: 3,
-    max: 64,
-    required: true,
-  },
-  cardPic: {
-    type: String,
-    required: true,
-  },
+  cards: [carddSchema],
 });
+
+const Card = mongoose.model("Card", cardSchema);
 
 function validateCard(card) {
   const schema = {
-    cardId: Joi.string().min(3).max(3).required(),
-    cardName: Joi.string().min(3).max(64).required(),
-    cardPic: Joi.string().min(3).required(),
+    topicId: Joi.string().min(3).max(3).required(),
+    cards: Joi.array(),
   };
 
   return Joi.validate(card, schema);
 }
 
-exports.cardSchema = cardSchema;
+exports.Card = Card;
 exports.validate = validateCard;

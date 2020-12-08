@@ -1,6 +1,7 @@
 const express = require("express");
 // const questions = require("../routes/questions");
 const topics = require("../routes/topics");
+const cards = require("../routes/cards");
 const users = require("../routes/users");
 const avatars = require("../routes/avatars");
 const videos = require("../routes/videos");
@@ -15,6 +16,7 @@ module.exports = function (app) {
   app.use(express.json());
   // app.use("/api/questions", questions);
   app.use("/api/topics", topics);
+  app.use("/api/cards", cards);
   app.use("/api/users", users);
   app.use("/api/avatars", avatars);
   app.use("/api/videos", videos);

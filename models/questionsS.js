@@ -4,8 +4,8 @@ const mongoose = require("mongoose");
 const questionsSSchema = new mongoose.Schema({
   questionId: {
     type: String,
-    min: 8,
-    max: 8,
+    min: 1,
+    max: 1,
     requried: true,
   },
   question: {
@@ -24,10 +24,10 @@ const questionsSSchema = new mongoose.Schema({
 
 function validateQuestionsS(questionsS) {
   const schema = {
-    cardId: Joi.string().min(3).max(3),
-    correctInCard: Joi.number().min(0),
-    wrongInCard: Joi.number().min(0),
-    accuracyPercentageInCard: Joi.number().min(0).max(100),
+    questionId: Joi.string().min(1).max(1),
+    question: Joi.string(),
+    correctAnswer: Joi.string(),
+    wrongAnswer: Joi.string(),
   };
 
   return Joi.validate(questionsS, schema);

@@ -17,7 +17,7 @@ router.put("/:topicId/:cardId", [auth, admin], async (req, res) => {
 
   for (const q of rest.restVideos) {
     if (topicId != q.topicId || cardId != q.cardId) {
-      return res.status(400).send("topicId or cardId are not matched");
+      return res.status(400).send("topicId or cardId did not matched");
     }
   }
 

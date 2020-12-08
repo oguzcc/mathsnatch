@@ -17,8 +17,8 @@ const videoSchema = new mongoose.Schema({
   },
   videoId: {
     type: String,
-    min: 8,
-    max: 8,
+    min: 2,
+    max: 2,
     required: true,
   },
   videoLink: {
@@ -46,7 +46,7 @@ function validateVideo(video) {
   const schema = {
     topicId: Joi.string().min(3).max(3).required(),
     cardId: Joi.string().min(3).max(3).required(),
-    videoId: Joi.string().min(8).max(8).required(),
+    videoId: Joi.string().min(2).max(2).required(),
     videoLink: Joi.string().required(),
     solutionVideoLink: Joi.string().required(),
     correctVideoId: Joi.string().required(),
