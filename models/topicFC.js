@@ -4,6 +4,8 @@ const mongoose = require("mongoose");
 const topicFCSchema = new mongoose.Schema({
   cardId: {
     type: String,
+    min: 2,
+    max: 2,
   },
   correctInCard: {
     type: Number,
@@ -24,7 +26,7 @@ const topicFCSchema = new mongoose.Schema({
 
 function validateTopicFC(topicFC) {
   const schema = {
-    cardId: Joi.string().min(3).max(3),
+    cardId: Joi.string().min(2).max(2),
     correctInCard: Joi.number().min(0),
     wrongInCard: Joi.number().min(0),
     accuracyPercentageInCard: Joi.number().min(0).max(100),

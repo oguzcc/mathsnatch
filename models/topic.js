@@ -4,6 +4,8 @@ const mongoose = require("mongoose");
 const topicSchema = new mongoose.Schema({
   topicId: {
     type: String,
+    min: 3,
+    max: 3,
     required: true,
   },
   topicName: {

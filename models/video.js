@@ -11,14 +11,14 @@ const videoSchema = new mongoose.Schema({
   },
   cardId: {
     type: String,
-    min: 3,
-    max: 3,
+    min: 2,
+    max: 2,
     required: true,
   },
   videoId: {
     type: String,
-    min: 2,
-    max: 2,
+    min: 7,
+    max: 7,
     required: true,
   },
   videoLink: {
@@ -31,10 +31,14 @@ const videoSchema = new mongoose.Schema({
   },
   correctVideoId: {
     type: String,
+    min: 7,
+    max: 7,
     required: true,
   },
   wrongVideoId: {
     type: String,
+    min: 7,
+    max: 7,
     required: true,
   },
   questions: [questionsSSchema],
@@ -45,8 +49,8 @@ const Video = mongoose.model("Video", videoSchema);
 function validateVideo(video) {
   const schema = {
     topicId: Joi.string().min(3).max(3).required(),
-    cardId: Joi.string().min(3).max(3).required(),
-    videoId: Joi.string().min(2).max(2).required(),
+    cardId: Joi.string().min(2).max(2).required(),
+    videoId: Joi.string().min(7).max(7).required(),
     videoLink: Joi.string().required(),
     solutionVideoLink: Joi.string().required(),
     correctVideoId: Joi.string().required(),

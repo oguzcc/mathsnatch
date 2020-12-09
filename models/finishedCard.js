@@ -5,6 +5,8 @@ const { topicFCSchema } = require("./topicFC");
 const finishedCardSchema = new mongoose.Schema({
   topicId: {
     type: String,
+    min: 3,
+    max: 3,
     required: true,
   },
   cards: [topicFCSchema],
