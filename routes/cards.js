@@ -7,10 +7,10 @@ const router = express.Router();
 
 router.get("/", [auth], async (req, res) => {
   const queryResult = await req.query;
-  const topic = await Card.find(queryResult)
+  const cards = await Card.find(queryResult)
     .sort("topicId")
     .select("-_id -__v -cards._id");
-  res.send(topic);
+  res.send(cards[0].cards);
 });
 
 router.get("/:topicId", [auth], async (req, res) => {
@@ -23,7 +23,7 @@ router.get("/:topicId", [auth], async (req, res) => {
   if (!cards)
     return res.status(404).send("The topic with the given Id was not found.");
 
-  res.send(cards);
+  res.send(cards[0].cards);
 });
 
 router.post("/", [auth, admin], async (req, res) => {

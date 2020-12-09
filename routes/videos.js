@@ -7,8 +7,8 @@ const router = express.Router();
 
 router.get("/", [auth], async (req, res) => {
   const queryResult = await req.query;
-  const videos = await Video.find(queryResult).select("-_id -__v");
-  res.send(videos);
+  const video = await Video.find(queryResult).select("-_id -__v");
+  res.send(video[0]);
 });
 
 /* router.get("/:videoId", [auth], async (req, res) => {
