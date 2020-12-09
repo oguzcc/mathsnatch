@@ -5,6 +5,14 @@ const _ = require("lodash");
 const express = require("express");
 const router = express.Router();
 
+router.get("/", [auth], async (req, res) => {
+  const queryResult = await req.query;
+  const topic = await Card.find(queryResult)
+    .sort("topicId")
+    .select("-_id -__v -cards._id");
+  res.send(topic);
+});
+
 router.get("/:topicId", [auth], async (req, res) => {
   const topicId = req.params.topicId;
 
