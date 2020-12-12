@@ -31,6 +31,19 @@ router.get("/", [auth], async (req, res) => {
   res.send(users);
 });
 
+router.get("/:userId", [auth, validateObjectId], async (req, res) => {
+  const _id = req.params.userId;
+
+  const user = await User.findOne({
+    _id: _id,
+  }).select("-__v");
+
+  if (!user)
+    return res.status(404).send("The user with the given Id was not found.");
+
+  res.send(user);
+});
+
 router.get("/me", [auth], async (req, res) => {
   const user = await User.findById(req.user._id)
     .select("-password -__v")

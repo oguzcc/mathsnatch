@@ -31,15 +31,15 @@ const videoSchema = new mongoose.Schema({
   },
   correctVideoId: {
     type: String,
+    required: true,
     min: 7,
     max: 7,
-    required: true,
   },
   wrongVideoId: {
     type: String,
+    required: true,
     min: 7,
     max: 7,
-    required: true,
   },
   questions: [questionsSSchema],
 });
@@ -53,8 +53,8 @@ function validateVideo(video) {
     videoId: Joi.string().min(7).max(7).required(),
     videoLink: Joi.string().required(),
     solutionVideoLink: Joi.string().required(),
-    correctVideoId: Joi.string().required(),
-    wrongVideoId: Joi.string().required(),
+    correctVideoId: Joi.string().min(7).max(7).required(),
+    wrongVideoId: Joi.string().min(7).max(7).required(),
     questions: Joi.array(),
   };
 
