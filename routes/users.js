@@ -77,8 +77,8 @@ router.get("/me", [auth], async (req, res) => {
 }); */
 
 router.patch("/:id", [auth, validateObjectId], async (req, res) => {
-  // if (req.user._id !== req.params.id)
-  //   return res.status(401).send("Access denied");
+  if (req.user._id !== req.params.id)
+    return res.status(401).send("Access denied");
 
   const { error } = validate(req.body);
   if (error) return res.status(400).send(error.details[0].message);
