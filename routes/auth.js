@@ -39,10 +39,10 @@ router.post("/:id", [validateObjectId], async (req, res) => {
 }); */
 
 router.get("/guest", async (req, res) => {
-  const date = Date.now();
-  const name = "guest" + date.toString();
+  const date = Date.now().toString();
+  const name = "guest" + date;
   const email = name + "@mathsnatch.com";
-  const password = date.toString();
+  const password = date;
   const avatar = "5e4969d45f83cf2170cf7826";
 
   const user = new User({

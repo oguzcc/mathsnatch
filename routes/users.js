@@ -19,10 +19,10 @@ router.get("/", [auth], async (req, res) => {
   // });
 
   const users = await User.find()
-    .select("name avatar coins gems level location")
+    .select("name avatar lastOnline location level points coins gems keys")
     .populate("avatar", "avatarSvg")
     .limit(10)
-    .sort("-coins");
+    .sort("-level");
 
   //user.coins = userIndex + 1;
 
@@ -33,22 +33,56 @@ router.get("/", [auth], async (req, res) => {
 
 router.get("/me", [auth], async (req, res) => {
   const user = await User.findById(req.user._id)
-    .select("-password -__v")
+    .select(
+      "-password -__v -logCards -logChallenges -finishedCards._id -finishedCards.cards._id -finishedCards.cards.subjects._id -finishedChallenges._id -finishedChallenges.cards._id -finishedChallenges.cards.subjects._id"
+    )
     .populate("avatar", "avatarSvg");
 
   // user.finishedCards.sort(function(a, b) {
   //   return a.topicID > b.topicID ? 1 : b.topicID > a.topicID ? -1 : 0;
   // });
 
-  user.finishedCards.sort(function (a, b) {
-    return a.topicId - b.topicId;
-  });
+  // user.finishedCards.sort(function (a, b) {
+  //   return a.topicId - b.topicId;
+  // });
 
-  for (let i = 0; i < user.finishedCards.length; i++) {
-    user.finishedCards[i].cards.sort(function (a, b) {
-      return a.cardId - b.cardId;
-    });
-  }
+  // user.finishedChallenges.sort(function (a, b) {
+  //   return a.topicId - b.topicId;
+  // });
+
+  // for (let i = 0; i < user.finishedCards.length; i++) {
+  //   user.finishedCards[i].cards.sort(function (a, b) {
+  //     return a.cardId - b.cardId;
+  //   });
+  // }
+
+  // for (let i = 0; i < user.finishedChallenges.length; i++) {
+  //   user.finishedChallenges[i].cards.sort(function (a, b) {
+  //     return a.cardId - b.cardId;
+  //   });
+  // }
+
+  // for (let i = 0; i < user.finishedCards.cards.length; i++) {
+  //   user.finishedCards.cards[i].subjects.sort(function (a, b) {
+  //     return a.subjectId - b.subjectId;
+  //   });
+  // }
+
+  // for (let i = 0; i < user.finishedChallenges.cards.length; i++) {
+  //   user.finishedChallenges.cards[i].subjects.sort(function (a, b) {
+  //     return a.subjectId - b.subjectId;
+  //   });
+  // }
+
+  res.send(user);
+});
+
+router.get("/mefull", [auth], async (req, res) => {
+  const user = await User.findById(req.user._id)
+    .select(
+      "-password -__v -logCards._id -finishedCards._id -finishedCards.cards._id -finishedCards.cards.subjects._id -logChallenges._id -finishedChallenges._id -finishedChallenges.cards._id -finishedChallenges.cards.subjects._id"
+    )
+    .populate("avatar", "avatarSvg");
 
   res.send(user);
 });
@@ -110,6 +144,7 @@ router.patch("/:id", [auth, validateObjectId], async (req, res) => {
         age: req.body.age,
         avatar: req.body.avatar,
         location: req.body.location,
+        lastOnline: Date.now(),
       },
     },
     { new: true }
@@ -122,11 +157,12 @@ router.patch("/:id", [auth, validateObjectId], async (req, res) => {
       _.pick(result, [
         "_id",
         "name",
+        "age",
         "avatar",
         "isAdmin",
         "isGold",
         "location",
-        "age",
+        "lastOnline",
       ])
     );
 });

@@ -1,11 +1,12 @@
+// Topic model
 const Joi = require("joi");
 const mongoose = require("mongoose");
 
 const topicSchema = new mongoose.Schema({
   topicId: {
     type: String,
-    min: 3,
-    max: 3,
+    min: 2,
+    max: 2,
     required: true,
   },
   topicName: {
@@ -26,7 +27,7 @@ const Topic = mongoose.model("Topic", topicSchema);
 
 function validateTopic(topic) {
   const schema = {
-    topicId: Joi.string().min(3).max(3).required(),
+    topicId: Joi.string().min(2).max(2).required(),
     topicName: Joi.string().min(3).max(64).required(),
     topicPic: Joi.string().min(3).required(),
     difficulty: Joi.number().required(),

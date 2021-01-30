@@ -1,4 +1,4 @@
-const { validate } = require("../models/cardend");
+const { validate } = require("../models/challengeend");
 const { User } = require("../models/user");
 const auth = require("../middleware/auth");
 const _ = require("lodash");
@@ -8,7 +8,7 @@ const express = require("express");
 const { parseInt } = require("lodash");
 const router = express.Router();
 
-Fawn.init(mongoose);
+// Fawn.init(mongoose);
 
 router.post("/", [auth], async (req, res) => {
   const { error } = validate(req.body);
@@ -20,14 +20,14 @@ router.post("/", [auth], async (req, res) => {
   const user = await User.findById(req.body.user_id);
   if (!user) return res.status(400).send("Invalid user.");
 
-  const bodyFC0 = req.body.finishedCards[0];
-  const bodylogCards = req.body.logCards;
+  const bodyFC0 = req.body.finishedChallenges[0];
+  const bodylogChallenges = req.body.logChallenges;
   const topicId = bodyFC0.topicId;
   const cardId = bodyFC0.cards[0].cardId;
   const subjects = bodyFC0.cards[0].subjects;
 
-  bodylogCards.forEach((element) => {
-    user.logCards.push(element);
+  bodylogChallenges.forEach((element) => {
+    user.logChallenges.push(element);
   });
 
   let iofc;
@@ -35,99 +35,117 @@ router.post("/", [auth], async (req, res) => {
   let iofc3;
 
   function accuracyPercentageUpdate() {
-    user.finishedCards[iofc].cards[iofc2].subjects[
+    user.finishedChallenges[iofc].cards[iofc2].subjects[
       iofc3
     ].accuracyPercentageInSubject =
-      (user.finishedCards[iofc].cards[iofc2].subjects[iofc3].correctInSubject /
-        (user.finishedCards[iofc].cards[iofc2].subjects[iofc3]
+      (user.finishedChallenges[iofc].cards[iofc2].subjects[iofc3]
+        .correctInSubject /
+        (user.finishedChallenges[iofc].cards[iofc2].subjects[iofc3]
           .correctInSubject +
-          user.finishedCards[iofc].cards[iofc2].subjects[iofc3]
+          user.finishedChallenges[iofc].cards[iofc2].subjects[iofc3]
             .wrongInSubject)) *
       100;
   }
 
-  iofc = _.findIndex(user.finishedCards, {
+  iofc = _.findIndex(user.finishedChallenges, {
     topicId: topicId,
   });
   for (const element of subjects) {
     if (iofc != -1) {
       // topicId ye sahip obje mevcut
-      iofc2 = _.findIndex(user.finishedCards[iofc].cards, {
+      iofc2 = _.findIndex(user.finishedChallenges[iofc].cards, {
         cardId: cardId,
       });
       if (iofc2 != -1) {
         // cardId ye sahip obje mevcut
-        iofc3 = _.findIndex(user.finishedCards[iofc].cards[iofc2].subjects, {
-          subjectId: element.subjectId,
-        });
+        iofc3 = _.findIndex(
+          user.finishedChallenges[iofc].cards[iofc2].subjects,
+          {
+            subjectId: element.subjectId,
+          }
+        );
 
         if (iofc3 != -1) {
           //subjectId ye sahip obje mevcut
-          user.finishedCards[iofc].cards[iofc2].subjects[
+          user.finishedChallenges[iofc].cards[iofc2].subjects[
             iofc3
           ].correctInSubject =
-            user.finishedCards[iofc].cards[iofc2].subjects[iofc3]
+            user.finishedChallenges[iofc].cards[iofc2].subjects[iofc3]
               .correctInSubject + element.correctInSubject;
-          user.finishedCards[iofc].cards[iofc2].subjects[iofc3].wrongInSubject =
-            user.finishedCards[iofc].cards[iofc2].subjects[iofc3]
+          user.finishedChallenges[iofc].cards[iofc2].subjects[
+            iofc3
+          ].wrongInSubject =
+            user.finishedChallenges[iofc].cards[iofc2].subjects[iofc3]
               .wrongInSubject + element.wrongInSubject;
 
           accuracyPercentageUpdate();
         } else {
           // o subjectId ye sahip obje yok
-          user.finishedCards[iofc].cards[iofc2].subjects.push(element);
-          iofc3 = _.findIndex(user.finishedCards[iofc].cards[iofc2].subjects, {
-            subjectId: element.subjectId,
-          });
+          user.finishedChallenges[iofc].cards[iofc2].subjects.push(element);
+          iofc3 = _.findIndex(
+            user.finishedChallenges[iofc].cards[iofc2].subjects,
+            {
+              subjectId: element.subjectId,
+            }
+          );
           accuracyPercentageUpdate();
         }
       } else {
         // o cardId ye sahip obje yok
-        user.finishedCards[iofc].cards.push(bodyFC0.cards[0]);
-        iofc2 = _.findIndex(user.finishedCards[iofc].cards, {
+        user.finishedChallenges[iofc].cards.push(bodyFC0.cards[0]);
+        iofc2 = _.findIndex(user.finishedChallenges[iofc].cards, {
           cardId: cardId,
         });
         subjects.forEach((element2) => {
-          iofc3 = _.findIndex(user.finishedCards[iofc].cards[iofc2].subjects, {
-            subjectId: element2.subjectId,
-          });
+          iofc3 = _.findIndex(
+            user.finishedChallenges[iofc].cards[iofc2].subjects,
+            {
+              subjectId: element2.subjectId,
+            }
+          );
           accuracyPercentageUpdate();
         });
         break;
       }
     } else {
       // o topicId ye sahip obje yok
-      user.finishedCards.push(bodyFC0);
-      iofc = _.findIndex(user.finishedCards, {
+      user.finishedChallenges.push(bodyFC0);
+      iofc = _.findIndex(user.finishedChallenges, {
         topicId: topicId,
       });
-      iofc2 = _.findIndex(user.finishedCards[iofc].cards, {
+      iofc2 = _.findIndex(user.finishedChallenges[iofc].cards, {
         cardId: cardId,
       });
 
       subjects.forEach((element2) => {
-        iofc3 = _.findIndex(user.finishedCards[iofc].cards[iofc2].subjects, {
-          subjectId: element2.subjectId,
-        });
+        iofc3 = _.findIndex(
+          user.finishedChallenges[iofc].cards[iofc2].subjects,
+          {
+            subjectId: element2.subjectId,
+          }
+        );
         accuracyPercentageUpdate();
       });
       break;
     }
   }
 
-  user.finishedCards.sort(function (a, b) {
+  //user.coins = user.coins + parseInt(bodyCA) * 100;
+  //user.level = user.level + user.coins / 1000;
+
+  user.finishedChallenges.sort(function (a, b) {
     return a.topicId - b.topicId;
   });
 
-  for (let i = 0; i < user.finishedCards.length; i++) {
-    user.finishedCards[i].cards.sort(function (a, b) {
+  for (let i = 0; i < user.finishedChallenges.length; i++) {
+    user.finishedChallenges[i].cards.sort(function (a, b) {
       return a.cardId - b.cardId;
     });
   }
 
-  for (let i = 0; i < user.finishedCards.length; i++) {
-    for (let j = 0; j < user.finishedCards[i].cards.length; j++) {
-      user.finishedCards[i].cards[j].subjects.sort(function (a, b) {
+  for (let i = 0; i < user.finishedChallenges.length; i++) {
+    for (let j = 0; j < user.finishedChallenges[i].cards.length; j++) {
+      user.finishedChallenges[i].cards[j].subjects.sort(function (a, b) {
         return a.subjectId - b.subjectId;
       });
     }
@@ -145,8 +163,8 @@ router.post("/", [auth], async (req, res) => {
             coins: user.coins,
             gems: user.gems,
             lastOnline: new Date(),
-            finishedCards: user.finishedCards,
-            logCards: user.logCards,
+            finishedChallenges: user.finishedChallenges,
+            logChallenges: user.logChallenges,
           },
         }
       )

@@ -7,22 +7,24 @@ const router = express.Router();
 
 router.get("/", [auth], async (req, res) => {
   const queryResult = await req.query;
-  const video = await Video.find(queryResult).select("-_id -__v");
+  const video = await Video.find(queryResult).select(
+    "-_id -__v -questions._id"
+  );
   res.send(video[0]);
 });
 
-/* router.get("/:videoId", [auth], async (req, res) => {
+router.get("/:videoId", [auth], async (req, res) => {
   const videoId = req.params.videoId;
 
   const video = await Video.find({
     videoId: videoId,
-  }).select("-_id -__v");
+  }).select("-_id -__v -questions._id");
 
   if (!video)
     return res.status(404).send("The video with the given Id was not found.");
 
-  res.send(video);
-}); */
+  res.send(video[0]);
+});
 
 router.post("/", [auth, admin], async (req, res) => {
   const { error } = validate(req.body);
@@ -30,7 +32,16 @@ router.post("/", [auth, admin], async (req, res) => {
 
   const video = new Video(
     _.pick(req.body, [
-      "topicId cardId videoId videoLink solutionVideoLink correctVideoId wrongVideoId questions",
+      "topicId",
+      "cardId",
+      "subjectId",
+      "videoId",
+      "videoLevel",
+      "videoLink",
+      "solutionVideoLink",
+      "wrongVideoId",
+      "correctVideoId",
+      "questions",
     ])
   );
 

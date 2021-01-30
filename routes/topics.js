@@ -5,14 +5,16 @@ const _ = require("lodash");
 const express = require("express");
 const router = express.Router();
 
+// topicler topicId query ile cagrilabilir
 router.get("/", [auth], async (req, res) => {
   const queryResult = await req.query;
   const topics = await Topic.find(queryResult)
     .sort("topicId")
     .select("-_id -__v");
-  res.send(topics);
+  topics.length == 1 ? res.send(topics[0]) : res.send(topics);
 });
 
+// ya da parametre olarak
 router.get("/:topicId", [auth], async (req, res) => {
   const topicId = req.params.topicId;
 
@@ -23,7 +25,7 @@ router.get("/:topicId", [auth], async (req, res) => {
   if (!topic)
     return res.status(404).send("The topic with the given Id was not found.");
 
-  res.send(topic);
+  res.send(topic[0]);
 });
 
 router.post("/", [auth, admin], async (req, res) => {

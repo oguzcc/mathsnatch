@@ -1,20 +1,21 @@
+// User model -> finishedCards array
 const Joi = require("joi");
 const mongoose = require("mongoose");
-const { topicFCSchema } = require("./topicFC");
+const { cardFCSchema } = require("./cardFC");
 
 const finishedCardSchema = new mongoose.Schema({
   topicId: {
     type: String,
-    min: 3,
-    max: 3,
+    min: 2,
+    max: 2,
     required: true,
   },
-  cards: [topicFCSchema],
+  cards: [cardFCSchema],
 });
 
 function validateFinishedCard(finishedCard) {
   const schema = {
-    topicId: Joi.string().min(3).max(3).required(),
+    topicId: Joi.string().min(2).max(2).required(),
     cards: Joi.array(),
   };
 

@@ -20,14 +20,24 @@ const questionsSSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  questionLevel: {
+    type: Number,
+    min: 0,
+    max: 5,
+  },
+  responseTime: {
+    type: Number,
+    default: 15,
+  },
 });
 
 function validateQuestionsS(questionsS) {
   const schema = {
-    questionId: Joi.string().min(8).max(8),
-    question: Joi.string(),
-    correctAnswer: Joi.string(),
-    wrongAnswer: Joi.string(),
+    questionId: Joi.string().min(8).max(8).required(),
+    question: Joi.string().required(),
+    correctAnswer: Joi.string().required(),
+    wrongAnswer: Joi.string().required(),
+    responseTime: Joi.number().default(15),
   };
 
   return Joi.validate(questionsS, schema);

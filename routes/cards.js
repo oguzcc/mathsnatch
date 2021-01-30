@@ -5,6 +5,7 @@ const _ = require("lodash");
 const express = require("express");
 const router = express.Router();
 
+// cardlar topicId query ile cagrilabilir
 router.get("/", [auth], async (req, res) => {
   const queryResult = await req.query;
   const cards = await Card.find(queryResult)
@@ -13,6 +14,7 @@ router.get("/", [auth], async (req, res) => {
   res.send(cards[0].cards);
 });
 
+// ya da buradaki gibi parametre olarak
 router.get("/:topicId", [auth], async (req, res) => {
   const topicId = req.params.topicId;
 

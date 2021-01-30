@@ -1,3 +1,4 @@
+// Card model request
 const Joi = require("joi");
 const mongoose = require("mongoose");
 
@@ -8,7 +9,7 @@ const restCardSchema = new mongoose.Schema({
   },
 });
 
-const RestCard = mongoose.model("RestCard", restSchema);
+const RestCard = mongoose.model("RestCard", restCardSchema);
 
 function validateRestCard(restCard) {
   const schema = {

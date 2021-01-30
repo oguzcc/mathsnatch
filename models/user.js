@@ -1,8 +1,12 @@
+// User model
 const jwt = require("jsonwebtoken");
 const Joi = require("joi");
 const mongoose = require("mongoose");
 const { Avatar } = require("./avatar");
 const { finishedCardSchema } = require("./finishedCard");
+const { finishedChallengeSchema } = require("./finishedChallenge");
+const { logCardSchema } = require("./logCard");
+const { logChallengeSchema } = require("./logChallenge");
 
 const userSchema = new mongoose.Schema({
   name: {
@@ -56,6 +60,16 @@ const userSchema = new mongoose.Schema({
     type: Boolean,
     default: false,
   },
+  level: {
+    type: Number,
+    default: 0,
+    min: 0,
+  },
+  points: {
+    type: Number,
+    default: 0,
+    min: 0,
+  },
   coins: {
     type: Number,
     default: 0,
@@ -66,37 +80,15 @@ const userSchema = new mongoose.Schema({
     default: 0,
     min: 0,
   },
-  level: {
+  keys: {
     type: Number,
     default: 0,
     min: 0,
   },
-  correctAnswers: {
-    type: Number,
-    default: 0,
-    min: 0,
-  },
-  wrongAnswers: {
-    type: Number,
-    default: 0,
-    min: 0,
-  },
-  accuracyPercentage: {
-    type: Number,
-    default: 0,
-    min: 0,
-  },
+  logCards: [logCardSchema],
+  logChallenges: [logChallengeSchema],
   finishedCards: [finishedCardSchema],
-  challengeCorrectAnswers: {
-    type: Number,
-    default: 0,
-    min: 0,
-  },
-  challengeWrongAnswers: {
-    type: Number,
-    default: 0,
-    min: 0,
-  },
+  finishedChallenges: [finishedChallengeSchema],
 });
 
 userSchema.methods.generateAuthToken = function () {
@@ -125,15 +117,15 @@ function validateUser(user) {
     location: Joi.string(),
     isAdmin: Joi.boolean(),
     isGold: Joi.boolean(),
+    level: Joi.number().min(0),
+    points: Joi.number().min(0),
     coins: Joi.number().min(0),
     gems: Joi.number().min(0),
-    level: Joi.number().min(0),
-    correctAnswers: Joi.number().min(0),
-    wrongAnswers: Joi.number().min(0),
-    accuracyPercentage: Joi.number().min(0).max(100),
+    keys: Joi.number().min(0),
+    logCards: Joi.array(),
+    logChallenges: Joi.array(),
     finishedCards: Joi.array(),
-    challengeCorrectAnswers: Joi.number().min(0),
-    challengeWrongAnswers: Joi.number().min(0),
+    finishedChallenges: Joi.array(),
   };
 
   return Joi.validate(user, schema);
