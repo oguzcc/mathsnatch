@@ -7,10 +7,6 @@ const avatars = require('../routes/avatars');
 const videos = require('../routes/videos');
 const cardends = require('../routes/cardends');
 const challengeends = require('../routes/challengeends');
-// const restQuestions = require("../rest/rest_questions/21_21/21_21_11/21_21_11");
-// const restful = require("../routes/restful");
-// const rests = require("../routes/rests/rests");
-// const settings = require("../routes/settings");
 const auth = require('../routes/auth');
 const error = require('../middleware/error');
 
@@ -24,10 +20,6 @@ module.exports = function (app) {
   app.use('/api/videos', videos);
   app.use('/api/cardends', cardends);
   app.use('/api/challengeends', challengeends);
-  // app.use("/api/restquestions", restQuestions);
-  // app.use("/api/restful", restful);
-  // app.use("/api/rests", rests);
-  // app.use("/api/settings", settings);
   app.use('/api/auth', auth);
   app.use(error);
 };

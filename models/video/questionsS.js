@@ -1,9 +1,9 @@
 // video model / questionsS array
-const Joi = require("joi");
-const mongoose = require("mongoose");
+const Joi = require('joi');
+const mongoose = require('mongoose');
 
 const questionsSSchema = new mongoose.Schema({
-  questionId: {
+  questionVId: {
     type: String,
     min: 8,
     max: 8,

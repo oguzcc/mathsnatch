@@ -1,7 +1,7 @@
 // Question model
-const Joi = require("joi");
-const mongoose = require("mongoose");
-const { answerSchema } = require("./answer");
+const Joi = require('joi');
+const mongoose = require('mongoose');
+const { answerSchema } = require('./answer');
 
 const questionSchema = new mongoose.Schema({
   topicId: {
@@ -46,7 +46,6 @@ const questionSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-
   semanticQuestion: {
     type: String,
     required: true,
@@ -59,7 +58,7 @@ const questionSchema = new mongoose.Schema({
   answers: [answerSchema],
 });
 
-const Question = mongoose.model("Question", questionSchema);
+const Question = mongoose.model('Question', questionSchema);
 
 function validateQuestion(question) {
   const schema = {
