@@ -1,13 +1,13 @@
-const { Question, validate } = require("../models/question/question");
-const { answerSchema } = require("../models/question/answer");
-const admin = require("../middleware/admin");
-const auth = require("../middleware/auth");
-const _ = require("lodash");
-const express = require("express");
+const { Question, validate } = require('../models/question/question');
+const { answerSchema } = require('../models/question/answer');
+const admin = require('../middleware/admin');
+const auth = require('../middleware/auth');
+const _ = require('lodash');
+const express = require('express');
 const router = express.Router();
 
 // questionlar subjectId, questionId parametre ile cagrilabilir
-router.get("/", [auth], async (req, res) => {
+router.get('/', [auth], async (req, res) => {
   const queryResult = await req.query;
   const questions = await Question.aggregate([
     {
@@ -28,45 +28,58 @@ router.get("/", [auth], async (req, res) => {
 });
 
 // ya da parametre olarak
-router.get("/:questionId", [auth], async (req, res) => {
+router.get('/:questionId', [auth], async (req, res) => {
   const questionId = req.params.questionId;
 
   const question = await Question.find({
     questionId: questionId,
-  }).select("-_id -__v -answers._id");
+  }).select('-_id -__v -answers._id');
 
   if (!question)
     return res
       .status(404)
-      .send("The question with the given Id was not found.");
+      .send('The question with the given Id was not found.');
 
   res.send(question[0]);
 });
 
-router.post("/", [auth, admin], async (req, res) => {
+router.post('/', [auth, admin], async (req, res) => {
   const { error } = validate(req.body);
   if (error) return res.status(400).send(error.details[0].message);
 
   const question = new Question(
     _.pick(req.body, [
-      "topicId",
-      "cardId",
-      "subjectId",
-      "questionId",
-      "questionLevel",
-      "responseTime",
-      "layoutType",
-      "question",
-      "semanticQuestion",
-      "semanticAnswer",
-      "gameTypes",
-      "answers",
+      'topicId',
+      'cardId',
+      'subjectId',
+      'questionId',
+      'questionLevel',
+      'responseTime',
+      'layoutType',
+      'question',
+      'semanticQuestion',
+      'semanticAnswer',
+      'gameTypes',
+      'answers',
     ])
   );
 
   await question.save();
 
   res.send(question);
+});
+
+router.delete('/:subjectId', [auth, admin], async (req, res) => {
+  const question = await Question.deleteMany({
+    subjectId: req.params.subjectId,
+  });
+
+  if (!question)
+    return res
+      .status(404)
+      .send('The question with the given Id was not found.');
+
+  res.send('deleted');
 });
 
 module.exports = router;
