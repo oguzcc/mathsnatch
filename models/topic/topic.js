@@ -1,6 +1,6 @@
 // Topic model
-const Joi = require("joi");
-const mongoose = require("mongoose");
+const Joi = require('joi');
+const mongoose = require('mongoose');
 
 const topicSchema = new mongoose.Schema({
   topicId: {
@@ -27,7 +27,7 @@ const topicSchema = new mongoose.Schema({
   },
 });
 
-const Topic = mongoose.model("Topic", topicSchema);
+const Topic = mongoose.model('Topic', topicSchema);
 
 function validateTopic(topic) {
   const schema = {

@@ -1,7 +1,7 @@
 // Video model
-const Joi = require("joi");
-const mongoose = require("mongoose");
-const { questionsSSchema } = require("./questionsS");
+const Joi = require('joi');
+const mongoose = require('mongoose');
+const { questionsSSchema } = require('./questionsS');
 
 const videoSchema = new mongoose.Schema({
   topicId: {
@@ -57,7 +57,7 @@ const videoSchema = new mongoose.Schema({
   questions: [questionsSSchema],
 });
 
-const Video = mongoose.model("Video", videoSchema);
+const Video = mongoose.model('Video', videoSchema);
 
 function validateVideo(video) {
   const schema = {

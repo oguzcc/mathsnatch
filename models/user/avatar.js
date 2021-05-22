@@ -1,6 +1,6 @@
 // User model -> avatar field
-const Joi = require("joi");
-const mongoose = require("mongoose");
+const Joi = require('joi');
+const mongoose = require('mongoose');
 
 const avatarSchema = new mongoose.Schema({
   avatarSvg: {
@@ -8,7 +8,7 @@ const avatarSchema = new mongoose.Schema({
   },
 });
 
-const Avatar = mongoose.model("Avatar", avatarSchema);
+const Avatar = mongoose.model('Avatar', avatarSchema);
 
 function validateAvatar(avatar) {
   const schema = {

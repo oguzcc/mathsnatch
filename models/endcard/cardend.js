@@ -1,8 +1,8 @@
 // Cardend model
-const Joi = require("joi");
-const mongoose = require("mongoose");
-const { finishedCardSchema } = require("./finishedCard");
-const { logCardSchema } = require("../log/logCard");
+const Joi = require('joi');
+const mongoose = require('mongoose');
+const { finishedCardSchema } = require('./finishedCard');
+const { logCardSchema } = require('../log/logCard');
 
 const cardendSchema = new mongoose.Schema({
   user: {
@@ -13,7 +13,7 @@ const cardendSchema = new mongoose.Schema({
   logCards: [logCardSchema],
 });
 
-const Cardend = mongoose.model("Cardend", cardendSchema);
+const Cardend = mongoose.model('Cardend', cardendSchema);
 
 function validateCardend(cardend) {
   const schema = {

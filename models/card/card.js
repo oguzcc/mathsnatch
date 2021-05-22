@@ -1,7 +1,7 @@
 // Card model
-const Joi = require("joi");
-const mongoose = require("mongoose");
-const { carddSchema } = require("./cardd");
+const Joi = require('joi');
+const mongoose = require('mongoose');
+const { carddSchema } = require('./cardd');
 
 const cardSchema = new mongoose.Schema({
   topicId: {
@@ -13,7 +13,7 @@ const cardSchema = new mongoose.Schema({
   cards: [carddSchema],
 });
 
-const Card = mongoose.model("Card", cardSchema);
+const Card = mongoose.model('Card', cardSchema);
 
 function validateCard(card) {
   const schema = {

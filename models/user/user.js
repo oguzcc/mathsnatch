@@ -1,13 +1,13 @@
 // User model
-const jwt = require("jsonwebtoken");
-const Joi = require("joi");
-const mongoose = require("mongoose");
-const { Avatar } = require("./avatar");
-const { finishedCardSchema } = require("../endcard/finishedCard");
+const jwt = require('jsonwebtoken');
+const Joi = require('joi');
+const mongoose = require('mongoose');
+const { Avatar } = require('./avatar');
+const { finishedCardSchema } = require('../endcard/finishedCard');
 const {
   finishedChallengeSchema,
-} = require("../endchallenge/finishedChallenge");
-const { logCardSchema } = require("../log/logCard");
+} = require('../endchallenge/finishedChallenge');
+const { logCardSchema } = require('../log/logCard');
 
 const userSchema = new mongoose.Schema({
   name: {
@@ -43,7 +43,7 @@ const userSchema = new mongoose.Schema({
   },
   avatar: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "Avatar",
+    ref: 'Avatar',
   },
   lastOnline: {
     type: Date,
@@ -51,7 +51,7 @@ const userSchema = new mongoose.Schema({
   },
   location: {
     type: String,
-    default: "",
+    default: '',
   },
   isAdmin: {
     type: Boolean,
@@ -110,7 +110,7 @@ userSchema.methods.generateAuthToken = function () {
   return token;
 };
 
-const User = mongoose.model("User", userSchema);
+const User = mongoose.model('User', userSchema);
 
 function validateUser(user) {
   const schema = {

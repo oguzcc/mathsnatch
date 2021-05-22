@@ -1,20 +1,20 @@
-const { Avatar, validate } = require("../models/user/avatar");
-const admin = require("../middleware/admin");
-const auth = require("../middleware/auth");
-const _ = require("lodash");
-const express = require("express");
+const { Avatar, validate } = require('../models/user/avatar');
+const admin = require('../middleware/admin');
+const auth = require('../middleware/auth');
+const _ = require('lodash');
+const express = require('express');
 const router = express.Router();
 
-router.get("/", [auth], async (req, res) => {
+router.get('/', [auth], async (req, res) => {
   const avatars = await Avatar.find();
   res.send(avatars);
 });
 
-router.post("/", [auth, admin], async (req, res) => {
+router.post('/', [auth, admin], async (req, res) => {
   const { error } = validate(req.body);
   if (error) return res.status(400).send(error.details[0].message);
 
-  const avatar = new Avatar(_.pick(req.body, ["avatarSvg"]));
+  const avatar = new Avatar(_.pick(req.body, ['avatarSvg']));
 
   await avatar.save();
 

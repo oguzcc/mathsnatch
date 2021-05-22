@@ -1,6 +1,6 @@
 // Question model -> answers array
-const Joi = require("joi");
-const mongoose = require("mongoose");
+const Joi = require('joi');
+const mongoose = require('mongoose');
 
 const answerSchema = new mongoose.Schema({
   answer: {

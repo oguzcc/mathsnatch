@@ -1,6 +1,6 @@
 // User model -> finishedCards array -> topicFC array
-const Joi = require("joi");
-const mongoose = require("mongoose");
+const Joi = require('joi');
+const mongoose = require('mongoose');
 
 const logCardSchema = new mongoose.Schema({
   timeStamp: {

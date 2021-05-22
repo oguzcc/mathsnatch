@@ -1,7 +1,7 @@
 // User model -> finishedCards array -> cardFC array
-const Joi = require("joi");
-const mongoose = require("mongoose");
-const { subjectFCSchema } = require("./subjectFC");
+const Joi = require('joi');
+const mongoose = require('mongoose');
+const { subjectFCSchema } = require('./subjectFC');
 
 const cardFCSchema = new mongoose.Schema({
   cardId: {

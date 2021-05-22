@@ -1,7 +1,7 @@
 // User model -> finishedChallenges array -> cardFCh array
-const Joi = require("joi");
-const mongoose = require("mongoose");
-const { subjectFChSchema } = require("./subjectFCh");
+const Joi = require('joi');
+const mongoose = require('mongoose');
+const { subjectFChSchema } = require('./subjectFCh');
 
 const cardFChSchema = new mongoose.Schema({
   cardId: {

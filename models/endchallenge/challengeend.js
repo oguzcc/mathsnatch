@@ -1,7 +1,7 @@
 // Challengeend model
-const Joi = require("joi");
-const mongoose = require("mongoose");
-const { finishedChallengeSchema } = require("./finishedChallenge");
+const Joi = require('joi');
+const mongoose = require('mongoose');
+const { finishedChallengeSchema } = require('./finishedChallenge');
 
 const challengeendSchema = new mongoose.Schema({
   user: {
@@ -11,7 +11,7 @@ const challengeendSchema = new mongoose.Schema({
   finishedChallenges: [finishedChallengeSchema],
 });
 
-const Challengeend = mongoose.model("Challengeend", challengeendSchema);
+const Challengeend = mongoose.model('Challengeend', challengeendSchema);
 
 function validateChallengeend(challengeend) {
   const schema = {

@@ -1,6 +1,6 @@
 // Card model -> cards array
-const Joi = require("joi");
-const mongoose = require("mongoose");
+const Joi = require('joi');
+const mongoose = require('mongoose');
 
 const carddSchema = new mongoose.Schema({
   cardId: {
@@ -21,7 +21,7 @@ const carddSchema = new mongoose.Schema({
   },
 });
 
-const Cardd = mongoose.model("Cardd", carddSchema);
+const Cardd = mongoose.model('Cardd', carddSchema);
 
 function validateCardd(cardd) {
   const schema = {

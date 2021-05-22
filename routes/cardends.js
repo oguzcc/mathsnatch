@@ -1,23 +1,23 @@
-const { validate } = require("../models/endcard/cardend");
-const { User } = require("../models/user/user");
-const auth = require("../middleware/auth");
-const _ = require("lodash");
-const mongoose = require("mongoose");
-const Fawn = require("fawn");
-const express = require("express");
+const { validate } = require('../models/endcard/cardend');
+const { User } = require('../models/user/user');
+const auth = require('../middleware/auth');
+const _ = require('lodash');
+const mongoose = require('mongoose');
+const Fawn = require('fawn');
+const express = require('express');
 const router = express.Router();
 
 Fawn.init(mongoose);
 
-router.post("/", [auth], async (req, res) => {
+router.post('/', [auth], async (req, res) => {
   const { error } = validate(req.body);
   if (error) return res.status(400).send(error.details[0].message);
 
   if (req.user._id !== req.body.user_id)
-    return res.status(401).send("Access denied");
+    return res.status(401).send('Access denied');
 
   const user = await User.findById(req.body.user_id);
-  if (!user) return res.status(400).send("Invalid user.");
+  if (!user) return res.status(400).send('Invalid user.');
 
   const bodyFC0 = req.body.finishedCards[0];
   const bodylogCards = req.body.logCards;
@@ -36,35 +36,35 @@ router.post("/", [auth], async (req, res) => {
   let totalCorrect = 0;
   let totalWrong = 0;
 
-  for(const treasures of subjects) {
+  for (const treasures of subjects) {
     totalCorrect = totalCorrect + treasures.correctInSubject;
     totalWrong = totalWrong + treasures.wrongInSubject;
   }
 
   const score = totalCorrect - totalWrong * 3;
 
-function updateTreasures() {
-  user.points = _.round(user.points + score * 5);
-  user.coins = _.round(user.coins + score / 4);
-}
+  function updateTreasures() {
+    user.points = _.round(user.points + score * 5);
+    user.coins = _.round(user.coins + score / 4);
+  }
 
-function updateTreasuresPlayed() {
-  user.points = _.round(user.points + score);
-  user.coins = _.round(user.coins + score / 12);
-}
-
-
+  function updateTreasuresPlayed() {
+    user.points = _.round(user.points + score);
+    user.coins = _.round(user.coins + score / 12);
+  }
 
   function updateAccuracyPercentage() {
     user.finishedCards[iofc].cards[iofc2].subjects[
       iofc3
-    ].accuracyPercentageInSubject =
-      _.round((user.finishedCards[iofc].cards[iofc2].subjects[iofc3].correctInSubject /
+    ].accuracyPercentageInSubject = _.round(
+      (user.finishedCards[iofc].cards[iofc2].subjects[iofc3].correctInSubject /
         (user.finishedCards[iofc].cards[iofc2].subjects[iofc3]
           .correctInSubject +
           user.finishedCards[iofc].cards[iofc2].subjects[iofc3]
             .wrongInSubject)) *
-      100, 2);
+        100,
+      2
+    );
   }
 
   iofc = _.findIndex(user.finishedCards, {
@@ -92,7 +92,7 @@ function updateTreasuresPlayed() {
           user.finishedCards[iofc].cards[iofc2].subjects[iofc3].wrongInSubject =
             user.finishedCards[iofc].cards[iofc2].subjects[iofc3]
               .wrongInSubject + element.wrongInSubject;
-          
+
           updateTreasuresPlayed();
           updateAccuracyPercentage();
         } else {
@@ -163,7 +163,7 @@ function updateTreasuresPlayed() {
   try {
     new Fawn.Task()
       .update(
-        "users",
+        'users',
         { _id: user._id },
         {
           $set: {
@@ -182,21 +182,21 @@ function updateTreasuresPlayed() {
 
     res.send(
       _.pick(user, [
-        "_id",
-        "name",
-        "email",
-        "isAdmin",
-        "isGold",
-        "lastOnline",
-        "level",
-        "points",
-        "coins",
-        "gems",
-        "tickets"
+        '_id',
+        'name',
+        'email',
+        'isAdmin',
+        'isGold',
+        'lastOnline',
+        'level',
+        'points',
+        'coins',
+        'gems',
+        'tickets',
       ])
     );
   } catch (ex) {
-    res.status(500).send("Something failed.");
+    res.status(500).send('Something failed.');
   }
 });
 
