@@ -18,6 +18,24 @@ router.get('/', [auth], async (req, res) => {
         ],
       },
     },
+    {
+      $project: {
+        _id: 0,
+        topicId: 1,
+        cardId: 1,
+        subjectId: 1,
+        questionId: 1,
+        questionLevel: 1,
+        responseTime: 1,
+        layoutType: 1,
+        question: 1,
+        semanticQuestion: 1,
+        semanticAnswer: 1,
+        gameTypes: 1,
+        'answers.answer': 1,
+        'answers.isCorrect': 1,
+      },
+    },
     { $sample: { size: 50 } },
   ]);
   // const questions = await Question.find(queryResult)
