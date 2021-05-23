@@ -153,20 +153,7 @@ router.patch('/:id', [auth, validateObjectId], async (req, res) => {
   );
 
   const token = result.generateAuthToken();
-  res
-    .header('x-auth-token', token)
-    .send(
-      _.pick(result, [
-        '_id',
-        'name',
-        'age',
-        'avatar',
-        'isAdmin',
-        'isGold',
-        'location',
-        'lastOnline',
-      ])
-    );
+  res.header('x-auth-token', token).send(_.pick(result, ['_id']));
 });
 
 module.exports = router;

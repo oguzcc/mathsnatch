@@ -51,7 +51,7 @@ const userSchema = new mongoose.Schema({
   },
   location: {
     type: String,
-    default: '',
+    default: 'istanbul',
   },
   isAdmin: {
     type: Boolean,
