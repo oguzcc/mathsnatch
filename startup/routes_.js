@@ -1,0 +1,35 @@
+const express = require('express');
+const auth = require('../routes/auth');
+const error = require('../middleware/error');
+const q_212111 = require('../rest/rest_questions/21_21/21_21_11/21_21_11');
+const q_212116 = require('../rest/rest_questions/21_21/21_21_16/21_21_16');
+const q_212121 = require('../rest/rest_questions/21_21/21_21_21/21_21_21');
+const q_212126 = require('../rest/rest_questions/21_21/21_21_26/21_21_26');
+const q_212131 = require('../rest/rest_questions/21_21/21_21_31/21_21_31');
+const q_212136 = require('../rest/rest_questions/21_21/21_21_36/21_21_36');
+const q_212141 = require('../rest/rest_questions/21_21/21_21_41/21_21_41');
+const q_212146 = require('../rest/rest_questions/21_21/21_21_46/21_21_46');
+const restVideos = require('../routes/rests/restVideos');
+const restQuestions = require('../routes/rests/restQuestions');
+const restCards = require('../routes/rests/restCards');
+// const restful = require("../routes/restful");
+// const settings = require("../routes/settings");
+
+module.exports = function (app) {
+  app.use(express.json());
+  app.use('/api/auth', auth);
+  app.use(error);
+  app.use('/api/q_212111', q_212111);
+  app.use('/api/q_212116', q_212116);
+  app.use('/api/q_212121', q_212121);
+  app.use('/api/q_212126', q_212126);
+  app.use('/api/q_212131', q_212131);
+  app.use('/api/q_212136', q_212136);
+  app.use('/api/q_212141', q_212141);
+  app.use('/api/q_212146', q_212146);
+  app.use('/api/rest_videos', restVideos);
+  app.use('/api/rest_questions', restQuestions);
+  app.use('/api/rest_cards', restCards);
+  // app.use("/api/restful", restful);
+  // app.use("/api/settings", settings);
+};
