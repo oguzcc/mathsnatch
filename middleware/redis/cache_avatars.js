@@ -8,7 +8,7 @@ module.exports = function (req, res, next) {
     if (data !== null) {
       // console.log('getting from redis');
 
-      res.send(`redis${JSON.stringify(data)}`);
+      res.send(`${data}`);
     } else {
       next();
     }
