@@ -1,17 +1,21 @@
 const { Topic, validate } = require('../models/topic/topic');
 const admin = require('../middleware/admin');
 const auth = require('../middleware/auth');
+const { client } = require('../startup/redis_client');
+const cache = require('../middleware/redis/cache_topics');
 const _ = require('lodash');
 const express = require('express');
 const router = express.Router();
 
 // topicler topicId query ile cagrilabilir
-router.get('/', [auth], async (req, res) => {
+router.get('/', [auth, cache], async (req, res) => {
   const queryResult = await req.query;
   const topics = await Topic.find(queryResult)
     .sort('topicId')
     .select('-_id -__v');
-  topics.length == 1 ? res.send(topics[0]) : res.send(topics);
+  client.setex('topics', 86400, JSON.stringify(topics));
+
+  res.send(topics);
 });
 
 // ya da parametre olarak

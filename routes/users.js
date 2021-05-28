@@ -1,5 +1,7 @@
 const auth = require('../middleware/auth');
 const bcrypt = require('bcrypt');
+const { client } = require('../startup/redis_client');
+const cache = require('../middleware/redis/cache_users');
 const _ = require('lodash');
 const { User, validate } = require('../models/user/user');
 const { Avatar } = require('../models/user/avatar');
@@ -7,7 +9,7 @@ const validateObjectId = require('../middleware/validateObjectId');
 const express = require('express');
 const router = express.Router();
 
-router.get('/', [auth], async (req, res) => {
+router.get('/', [auth, cache], async (req, res) => {
   // const user = await User.findById(req.user._id)
   //   .select("name avatar coins gems level location")
   //   .populate("avatar", "avatarSvg");
@@ -25,10 +27,7 @@ router.get('/', [auth], async (req, res) => {
     .populate('avatar', 'avatarSvg')
     .limit(10)
     .sort('-points');
-
-  //user.coins = userIndex + 1;
-
-  //users.push(user);
+  client.setex('users', 86400, JSON.stringify(users));
 
   res.send(users);
 });

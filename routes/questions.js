@@ -2,12 +2,14 @@ const { Question, validate } = require('../models/question/question');
 const { answerSchema } = require('../models/question/answer');
 const admin = require('../middleware/admin');
 const auth = require('../middleware/auth');
+const { client } = require('../startup/redis_client');
+const cache = require('../middleware/redis/cache_questions');
 const _ = require('lodash');
 const express = require('express');
 const router = express.Router();
 
 // questionlar subjectId, questionId parametre ile cagrilabilir
-router.get('/', [auth], async (req, res) => {
+router.get('/', [auth, cache], async (req, res) => {
   const queryResult = await req.query;
   const questions = await Question.aggregate([
     {
@@ -42,6 +44,8 @@ router.get('/', [auth], async (req, res) => {
   //   .sort("questionId")
   //   .select("-_id -__v -answers._id")
   //   .limit(50);
+  client.setex('questions', 86400, JSON.stringify(questions));
+
   res.send(questions);
 });
 

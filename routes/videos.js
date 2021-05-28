@@ -1,17 +1,21 @@
 const { Video, validate } = require('../models/video/video');
 const admin = require('../middleware/admin');
 const auth = require('../middleware/auth');
+const { client } = require('../startup/redis_client');
+const cache = require('../middleware/redis/cache_videos');
 const _ = require('lodash');
 const express = require('express');
 const router = express.Router();
 
 // videolar videoId query ile cagrilabilir
-router.get('/', [auth], async (req, res) => {
+router.get('/', [auth, cache], async (req, res) => {
   const queryResult = await req.query;
   const videos = await Video.find(queryResult).select(
     '-_id -__v -questions._id'
   );
-  videos.length == 1 ? res.send(videos[0]) : res.send(videos);
+  // videos.length == 1 ? res.send(videos[0]) : res.send(videos);
+  client.setex('videos', 86400, JSON.stringify(videos[0]));
+  res.send(videos[0]);
 });
 
 // ya da parametre olarak

@@ -1,16 +1,20 @@
 const { Card, validate } = require('../models/card/card');
 const admin = require('../middleware/admin');
 const auth = require('../middleware/auth');
+const { client } = require('../startup/redis_client');
+const cache = require('../middleware/redis/cache_cards');
 const _ = require('lodash');
 const express = require('express');
 const router = express.Router();
 
 // cardlar topicId query ile cagrilabilir
-router.get('/', [auth], async (req, res) => {
+router.get('/', [auth, cache], async (req, res) => {
   const queryResult = await req.query;
   const cards = await Card.find(queryResult)
     .sort('topicId')
     .select('-_id -__v -cards._id');
+  client.setex('cards', 86400, JSON.stringify(cards[0].cards));
+
   res.send(cards[0].cards);
 });
 
