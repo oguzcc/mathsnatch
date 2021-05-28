@@ -28,7 +28,7 @@ const router = express.Router();
 
 router.get('/', [auth, cache], async (req, res) => {
   const avatars = await Avatar.find();
-  client.setex('avatars', 20, JSON.stringify(avatars));
+  client.setex('avatars', 3600 * 24 * 7, JSON.stringify(avatars));
   // console.log('getting from database');
   res.send(avatars);
 });
