@@ -1,5 +1,8 @@
 const redis = require('redis');
+const fs = require('fs');
 
-const REDIS_PORT = process.env.REDIS_PORT;
-
-exports.client = redis.createClient(REDIS_PORT);
+exports.client = redis.createClient(process.env.REDIS_URL, {
+  tls: {
+    rejectUnauthorized: false,
+  },
+});
