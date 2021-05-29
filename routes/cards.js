@@ -13,7 +13,7 @@ router.get('/', [auth, cache], async (req, res) => {
   const cards = await Card.find(queryResult)
     .sort('topicId')
     .select('-_id -__v -cards._id');
-  client.setex('cards', 86400, JSON.stringify(cards[0].cards));
+  client.set('cards', JSON.stringify(cards[0].cards), 'EX', 3600 * 24 * 7);
 
   res.send(cards[0].cards);
 });

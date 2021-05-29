@@ -9,7 +9,7 @@ const validateObjectId = require('../middleware/validateObjectId');
 const express = require('express');
 const router = express.Router();
 
-router.get('/', [auth, cache], async (req, res) => {
+router.get('/', [auth], async (req, res) => {
   // const user = await User.findById(req.user._id)
   //   .select("name avatar coins gems level location")
   //   .populate("avatar", "avatarSvg");
@@ -27,7 +27,7 @@ router.get('/', [auth, cache], async (req, res) => {
     .populate('avatar', 'avatarSvg')
     .limit(10)
     .sort('-points');
-  client.setex('users', 86400, JSON.stringify(users));
+  // client.set('users', JSON.stringify(users), 'EX', 3600 * 24);
 
   res.send(users);
 });

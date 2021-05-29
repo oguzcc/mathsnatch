@@ -13,7 +13,7 @@ router.get('/', [auth, cache], async (req, res) => {
   const topics = await Topic.find(queryResult)
     .sort('topicId')
     .select('-_id -__v');
-  client.setex('topics', 86400, JSON.stringify(topics));
+  client.set('topics', JSON.stringify(topics), 'EX', 3600 * 24 * 7);
 
   res.send(topics);
 });

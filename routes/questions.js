@@ -9,7 +9,7 @@ const express = require('express');
 const router = express.Router();
 
 // questionlar subjectId, questionId parametre ile cagrilabilir
-router.get('/', [auth, cache], async (req, res) => {
+router.get('/', [auth], async (req, res) => {
   const queryResult = await req.query;
   const questions = await Question.aggregate([
     {
@@ -44,7 +44,7 @@ router.get('/', [auth, cache], async (req, res) => {
   //   .sort("questionId")
   //   .select("-_id -__v -answers._id")
   //   .limit(50);
-  client.setex('questions', 86400, JSON.stringify(questions));
+  // client.setex('questions', 86400, JSON.stringify(questions));
 
   res.send(questions);
 });

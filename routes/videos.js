@@ -8,14 +8,15 @@ const express = require('express');
 const router = express.Router();
 
 // videolar videoId query ile cagrilabilir
-router.get('/', [auth, cache], async (req, res) => {
+router.get('/', [auth], async (req, res) => {
   const queryResult = await req.query;
   const videos = await Video.find(queryResult).select(
     '-_id -__v -questions._id'
   );
-  // videos.length == 1 ? res.send(videos[0]) : res.send(videos);
-  client.setex('videos', 86400, JSON.stringify(videos[0]));
-  res.send(videos[0]);
+  videos.length == 1 ? res.send(videos[0]) : res.send(videos);
+  // client.set('videos', JSON.stringify(videos), 'EX', 3600 * 24);
+
+  // res.send(videos);
 });
 
 // ya da parametre olarak

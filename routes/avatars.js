@@ -7,29 +7,10 @@ const _ = require('lodash');
 const express = require('express');
 const router = express.Router();
 
-// router.get('/', cache, async (req, res) => {
-//   try {
-//     console.log('Fetching Data...');
-
-//     const response = await fetch(`https://api.github.com/users/oguzcc`);
-
-//     const data = await response.json();
-
-//     const repos = data.public_repos;
-
-//     client.setex('oguzcc', 20, repos);
-
-//     res.send(`${repos}`);
-//   } catch (err) {
-//     console.error(err);
-//     res.status(500);
-//   }
-// });
-
 router.get('/', [auth, cache], async (req, res) => {
   const avatars = await Avatar.find();
-  client.setex('avatars', 604800, JSON.stringify(avatars));
-  // console.log('getting from database');
+  client.set('avatars', JSON.stringify(avatars), 'EX', 3600 * 24 * 7);
+
   res.send(avatars);
 });
 
