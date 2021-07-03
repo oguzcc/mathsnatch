@@ -492,10 +492,7 @@
                 "type": "array",
                 "items": {
                   "x-auth-token": {
-                    "type": "array",
-                    "items": {
-                      "$ref": "#/definitions/x-auth-token"
-                    }
+                    "type": "string"
                   }
                 }
               }
