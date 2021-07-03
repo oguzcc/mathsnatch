@@ -8,7 +8,7 @@ const express = require('express');
 const router = express.Router();
 
 // cardlar topicId query ile cagrilabilir
-router.get('/', [auth], async (req, res) => {
+router.get('/', [auth, cache], async (req, res) => {
   const queryResult = await req.query;
   const cards = await Card.find(queryResult)
     .sort('topicId')
