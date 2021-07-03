@@ -22,7 +22,7 @@ router.get('/', [auth], async (req, res) => {
 
   const users = await User.find()
     .select(
-      'name avatar lastOnline location level points coins gems keys tickets'
+      '-password -__v -finishedCards._id -finishedCards.cards._id -finishedCards.cards.subjects._id -finishedChallenges._id -finishedChallenges.cards._id -finishedChallenges.cards.subjects._id'
     )
     .populate('avatar', 'avatarSvg')
     .limit(10)

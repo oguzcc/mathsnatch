@@ -8,12 +8,17 @@ const express = require('express');
 const router = express.Router();
 
 // cardlar topicId query ile cagrilabilir
-router.get('/', [auth, cache], async (req, res) => {
+router.get('/', [auth], async (req, res) => {
   const queryResult = await req.query;
   const cards = await Card.find(queryResult)
     .sort('topicId')
     .select('-_id -__v -cards._id');
-  client.set('cards', JSON.stringify(cards[0].cards), 'EX', 3600 * 24 * 7);
+
+  if (!cards || cards.length == 0)
+    return res
+      .status(404)
+      .send('The cards with the given topicId was not found.');
+  client.set('cards', JSON.stringify(cards[0].cards), 'EX', 3600 * 24);
 
   res.send(cards[0].cards);
 });
@@ -26,8 +31,10 @@ router.get('/:topicId', [auth], async (req, res) => {
     topicId: topicId,
   }).select('-_id -__v -cards._id');
 
-  if (!cards)
-    return res.status(404).send('The topic with the given Id was not found.');
+  if (!cards || cards.length == 0)
+    return res
+      .status(404)
+      .send('The cards with the given topicId was not found.');
 
   res.send(cards[0].cards);
 });

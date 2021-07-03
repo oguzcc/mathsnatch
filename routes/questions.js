@@ -46,6 +46,11 @@ router.get('/', [auth], async (req, res) => {
   //   .limit(50);
   // client.setex('questions', 86400, JSON.stringify(questions));
 
+  if (!questions || questions.length == 0)
+    return res
+      .status(404)
+      .send('The question with the given Id was not found.');
+
   res.send(questions);
 });
 
@@ -57,7 +62,7 @@ router.get('/:questionId', [auth], async (req, res) => {
     questionId: questionId,
   }).select('-_id -__v -answers._id');
 
-  if (!question)
+  if (!question || question.length == 0)
     return res
       .status(404)
       .send('The question with the given Id was not found.');

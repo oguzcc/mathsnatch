@@ -13,9 +13,12 @@ router.get('/', [auth, cache], async (req, res) => {
   const topics = await Topic.find(queryResult)
     .sort('topicId')
     .select('-_id -__v');
-  client.set('topics', JSON.stringify(topics), 'EX', 3600 * 24 * 7);
+  client.set('topics', JSON.stringify(topics), 'EX', 3600 * 24);
 
-  res.send(topics);
+  if (!topics || topics.length == 0)
+    return res.status(404).send('The topic with the given Id was not found.');
+
+  topics.length == 1 ? res.send(topics[0]) : res.send(topics);
 });
 
 // ya da parametre olarak
@@ -26,7 +29,7 @@ router.get('/:topicId', [auth], async (req, res) => {
     topicId: topicId,
   }).select('-_id -__v');
 
-  if (!topic)
+  if (!topic || topic.length == 0)
     return res.status(404).send('The topic with the given Id was not found.');
 
   res.send(topic[0]);

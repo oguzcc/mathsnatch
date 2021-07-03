@@ -1,6 +1,7 @@
 const Joi = require('joi');
 const bcrypt = require('bcrypt');
 const _ = require('lodash');
+const auth = require('../middleware/auth');
 const { User } = require('../models/user/user');
 const { Avatar } = require('../models/user/avatar');
 const mongoose = require('mongoose');
@@ -8,11 +9,15 @@ const express = require('express');
 const router = express.Router();
 const validateObjectId = require('../middleware/validateObjectId');
 
-router.post('/:id', [validateObjectId], async (req, res) => {
+router.post('/:id', [auth, validateObjectId], async (req, res) => {
   const { error } = validate(req.body);
   if (error) return res.status(400).send(error.details[0].message);
 
-  let user = await User.findOne({ email: req.body.email });
+  let user = await User.findOne({ _id: req.params.id });
+  if (!user)
+    return res.status(404).send('The user with the given Id was not found.');
+
+  user = await User.findOne({ email: req.body.email });
   if (!user) return res.status(400).send('Invalid email or password.');
 
   const validPassword = await bcrypt.compare(req.body.password, user.password);
@@ -21,7 +26,7 @@ router.post('/:id', [validateObjectId], async (req, res) => {
   await User.findByIdAndRemove(req.params.id);
 
   const token = user.generateAuthToken();
-  res.header('x-auth-token', token).send();
+  res.header('x-auth-token', token).send(token);
 });
 
 /* router.post("/", async (req, res) => {

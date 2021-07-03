@@ -13,6 +13,10 @@ router.get('/', [auth], async (req, res) => {
   const videos = await Video.find(queryResult).select(
     '-_id -__v -questions._id'
   );
+
+  if (!videos || videos.length == 0)
+    return res.status(404).send('The video with the given Id was not found.');
+
   videos.length == 1 ? res.send(videos[0]) : res.send(videos);
   // client.set('videos', JSON.stringify(videos), 'EX', 3600 * 24);
 
@@ -27,7 +31,7 @@ router.get('/:videoId', [auth], async (req, res) => {
     videoId: videoId,
   }).select('-_id -__v -questions._id');
 
-  if (!video)
+  if (!video || video.length == 0)
     return res.status(404).send('The video with the given Id was not found.');
 
   res.send(video[0]);
