@@ -1,13 +1,15 @@
-const auth = require("../middleware/auth");
-const bcrypt = require("bcrypt");
-const _ = require("lodash");
-const { User, validate } = require("../models/user");
-const { Avatar } = require("../models/avatar");
-const validateObjectId = require("../middleware/validateObjectId");
-const express = require("express");
+const auth = require('../middleware/auth');
+const bcrypt = require('bcrypt');
+const { client } = require('../startup/redis_client');
+const cache = require('../middleware/redis/cache_users');
+const _ = require('lodash');
+const { User, validate } = require('../models/user/user');
+const { Avatar } = require('../models/user/avatar');
+const validateObjectId = require('../middleware/validateObjectId');
+const express = require('express');
 const router = express.Router();
 
-router.get("/", [auth], async (req, res) => {
+router.get('/', [auth], async (req, res) => {
   // const user = await User.findById(req.user._id)
   //   .select("name avatar coins gems level location")
   //   .populate("avatar", "avatarSvg");
@@ -19,24 +21,23 @@ router.get("/", [auth], async (req, res) => {
   // });
 
   const users = await User.find()
-    .select("name avatar lastOnline location level points coins gems keys")
-    .populate("avatar", "avatarSvg")
+    .select(
+      '-password -__v -finishedCards._id -finishedCards.cards._id -finishedCards.cards.subjects._id -finishedChallenges._id -finishedChallenges.cards._id -finishedChallenges.cards.subjects._id'
+    )
+    .populate('avatar', 'avatarSvg')
     .limit(10)
-    .sort("-level");
-
-  //user.coins = userIndex + 1;
-
-  //users.push(user);
+    .sort('-points');
+  // client.set('users', JSON.stringify(users), 'EX', 3600 * 24);
 
   res.send(users);
 });
 
-router.get("/me", [auth], async (req, res) => {
+router.get('/me', [auth], async (req, res) => {
   const user = await User.findById(req.user._id)
     .select(
-      "-password -__v -logCards -logChallenges -finishedCards._id -finishedCards.cards._id -finishedCards.cards.subjects._id -finishedChallenges._id -finishedChallenges.cards._id -finishedChallenges.cards.subjects._id"
+      '-password -__v -finishedCards._id -finishedCards.cards._id -finishedCards.cards.subjects._id -finishedChallenges._id -finishedChallenges.cards._id -finishedChallenges.cards.subjects._id'
     )
-    .populate("avatar", "avatarSvg");
+    .populate('avatar', 'avatarSvg');
 
   // user.finishedCards.sort(function(a, b) {
   //   return a.topicID > b.topicID ? 1 : b.topicID > a.topicID ? -1 : 0;
@@ -77,15 +78,15 @@ router.get("/me", [auth], async (req, res) => {
   res.send(user);
 });
 
-router.get("/mefull", [auth], async (req, res) => {
-  const user = await User.findById(req.user._id)
-    .select(
-      "-password -__v -logCards._id -finishedCards._id -finishedCards.cards._id -finishedCards.cards.subjects._id -logChallenges._id -finishedChallenges._id -finishedChallenges.cards._id -finishedChallenges.cards.subjects._id"
-    )
-    .populate("avatar", "avatarSvg");
+// router.get("/mefull", [auth], async (req, res) => {
+//   const user = await User.findById(req.user._id)
+//     .select(
+//       "-password -__v -logCards._id -finishedCards._id -finishedCards.cards._id -finishedCards.cards.subjects._id -logChallenges._id -finishedChallenges._id -finishedChallenges.cards._id -finishedChallenges.cards.subjects._id"
+//     )
+//     .populate("avatar", "avatarSvg");
 
-  res.send(user);
-});
+//   res.send(user);
+// });
 
 /* router.post("/", async (req, res) => {
   const { error } = validate(req.body);
@@ -110,26 +111,26 @@ router.get("/mefull", [auth], async (req, res) => {
     .send(_.pick(user, ["_id", "name", "email", "isAdmin", "isGold"]));
 }); */
 
-router.patch("/:id", [auth, validateObjectId], async (req, res) => {
+router.patch('/:id', [auth, validateObjectId], async (req, res) => {
   if (req.user._id !== req.params.id)
-    return res.status(401).send("Access denied");
+    return res.status(401).send('Access denied');
 
   const { error } = validate(req.body);
   if (error) return res.status(400).send(error.details[0].message);
 
   let user = await User.findOne({ _id: req.params.id });
   if (!user)
-    return res.status(404).send("The user with the given id was not found.");
+    return res.status(404).send('The user with the given id was not found.');
 
   user = {};
   user = await User.findOne({ name: req.body.name });
   if (user && user.name === req.body.name)
-    return res.status(400).send("This user name is already in use.");
+    return res.status(400).send('This user name is already in use.');
 
   user = {};
   user = await User.findOne({ email: req.body.email });
   if (user && user.email === req.body.email)
-    return res.status(400).send("This email is already in use.");
+    return res.status(400).send('This email is already in use.');
 
   const salt = await bcrypt.genSalt(10);
   const password = await bcrypt.hash(req.body.password, salt);
@@ -151,20 +152,7 @@ router.patch("/:id", [auth, validateObjectId], async (req, res) => {
   );
 
   const token = result.generateAuthToken();
-  res
-    .header("x-auth-token", token)
-    .send(
-      _.pick(result, [
-        "_id",
-        "name",
-        "age",
-        "avatar",
-        "isAdmin",
-        "isGold",
-        "location",
-        "lastOnline",
-      ])
-    );
+  res.header('x-auth-token', token).send(_.pick(result, ['_id']));
 });
 
 module.exports = router;

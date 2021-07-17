@@ -1,0 +1,893 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "Matematik oyunu api",
+    "version": "1.0.0",
+    "title": "MathSnatch Game API",
+    "contact": {
+      "email": "oguzcc@gmail.com"
+    },
+    "license": {
+      "name": "Apache 2.0",
+      "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+    }
+  },
+  "host": "mathsnatch.herokuapp.com",
+  "basePath": "/api",
+  "tags": [
+    {
+      "name": "Auth",
+      "description": "Guest user oluşturma ve login işlemleri"
+    },
+    {
+      "name": "User",
+      "description": "Puan sıralamasına göre ilk 10 user ı çekme. users/me ile o anki aktif kullanıcının bilgilerini görme. Guest olarak kayıtlı kullanıcının elle girilen bilgilerini güncelleme."
+    },
+    {
+      "name": "Avatar",
+      "description": "Tüm avatarları çekme."
+    },
+    {
+      "name": "Topic",
+      "description": "Ana menüdeki tüm topicleri çekme. Ayrıca istenilen topicleri topicId parametresi ya da query kullanarak çekme."
+    },
+    {
+      "name": "Card",
+      "description": "Ana menüdeki tüm cardları çekme. Ayrıca cardları topicId parametresi ya da query kullanarak çekme."
+    },
+    {
+      "name": "Video",
+      "description": "Tüm videoları çekme. Ayrıca videoları videoId, subjectId ya da cardId parametreleri ile ya da query kullanarak çekme."
+    },
+    {
+      "name": "Question",
+      "description": "Questionları subjectId ya da cardId parametreleri ile çekebilme."
+    },
+    {
+      "name": "Cardend",
+      "description": "Video sonrası soru ve arkasından gelen oyun bitiminde database e atılacak sorgu"
+    },
+    {
+      "name": "Challengeend",
+      "description": "Karttaki tüm videoların bitiminden sonra kullanıcının tıklayarak gittiği o kart ile ilgili random getirilen tüm soruların bitiminde database e atılacak sorgu"
+    }
+  ],
+  "schemes": ["https"],
+  "paths": {
+    "/topics": {
+      "get": {
+        "tags": ["Topic"],
+        "summary": "Tüm topicler ya da query ile istenilen topicler",
+        "description": "Topiclerin tümünü çeker. topicId query ile istenilen topic de çekilebilir",
+        "operationId": "getTopicsByQuery",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "topicId",
+            "in": "query",
+            "description": "Get topics by query",
+            "required": false,
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "collectionFormat": "multi"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Topic"
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "token": []
+          }
+        ]
+      }
+    },
+    "/cards": {
+      "get": {
+        "tags": ["Card"],
+        "summary": "Tüm cardlar ya da query ile istenilen topice ait cardlar",
+        "description": "topicId query ile o topicId ye ait tüm kartlar çekilir.",
+        "operationId": "getCardsByTopicIdQuery",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "topicId",
+            "in": "query",
+            "description": "Get cards by query",
+            "required": false,
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "collectionFormat": "multi"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Card"
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "token": []
+          }
+        ]
+      }
+    },
+    "/avatars": {
+      "get": {
+        "tags": ["Avatar"],
+        "summary": "Avatarlar çekilir.",
+        "description": "Kayıtlı olan tüm avatarlar getirilir.",
+        "operationId": "getAvatars",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Avatar"
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "token": []
+          }
+        ]
+      }
+    },
+    "/videos": {
+      "get": {
+        "tags": ["Video"],
+        "summary": "Tüm videolar ya da query ile istenilen videolar",
+        "description": "Videolarin tümünü çeker. videoId, subjectId ya da cardId queryleri ile istenilen videolar da çekilebilir.",
+        "operationId": "getVideosByQuery",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "videoId",
+            "in": "query",
+            "description": "Get videos by videoId",
+            "required": false,
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "collectionFormat": "multi"
+          },
+          {
+            "name": "subjectId",
+            "in": "query",
+            "description": "Get videos by subjectId",
+            "required": false,
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "collectionFormat": "multi"
+          },
+          {
+            "name": "cardId",
+            "in": "query",
+            "description": "Get videos by cardId",
+            "required": false,
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "collectionFormat": "multi"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Video"
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "token": []
+          }
+        ]
+      }
+    },
+    "/questions": {
+      "get": {
+        "tags": ["Question"],
+        "summary": "Tüm questionlar ya da query ile istenilen questionlar",
+        "description": "Questionlarin tümünü çeker. Query ile istenilen question da çekilebilir",
+        "operationId": "getQuestionsBySubjectId",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "subjectId",
+            "in": "query",
+            "description": "Get questions by subjectId",
+            "required": false,
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "collectionFormat": "multi"
+          },
+          {
+            "name": "cardId",
+            "in": "query",
+            "description": "Get questions by cardId",
+            "required": false,
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "collectionFormat": "multi"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Question"
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "token": []
+          }
+        ]
+      }
+    },
+    "/users": {
+      "get": {
+        "tags": ["User"],
+        "summary": "Users top 10",
+        "description": "points e gore sıralanmış top 10 user getirilir.",
+        "operationId": "getTopTenUsers",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/User"
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "token": []
+          }
+        ]
+      }
+    },
+    "/users/me": {
+      "get": {
+        "tags": ["User"],
+        "summary": "o an aktif olan kullanıcı bilgileri",
+        "description": "Verilen token a sahip user ın bilgileri gösterilir.",
+        "operationId": "getMe",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/User"
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "token": []
+          }
+        ]
+      }
+    },
+    "/users/{id}": {
+      "patch": {
+        "tags": ["User"],
+        "summary": "id si belirtilen kullanıcının istenilen bilgileri güncellenir.",
+        "description": "id parametresi belirtilen kayıtlı kullanıcının istenilen user bilgileri bir defaya mahsus güncellenir. Response olarak user in _id bilgisi döner.",
+        "operationId": "patchUser",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Patch user by id",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "user",
+            "description": "The user to patch.",
+            "schema": {
+              "type": "object",
+              "required": [
+                "name",
+                "email",
+                "password",
+                "age",
+                "avatar",
+                "location"
+              ],
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "email": {
+                  "type": "string"
+                },
+                "password": {
+                  "type": "string"
+                },
+                "age": {
+                  "type": "number"
+                },
+                "avatar": {
+                  "type": "string"
+                },
+                "location": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          }
+        },
+        "security": [
+          {
+            "token": []
+          }
+        ]
+      }
+    },
+    "/auth/guest": {
+      "get": {
+        "tags": ["Auth"],
+        "summary": "Create guest user",
+        "description": "Bir guest user yaratılır.",
+        "operationId": "createGuestUser",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "headers": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "x-auth-token": {
+                    "type": "string"
+                  }
+                }
+              }
+            },
+            "description": "successful operation",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/User"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/{id}": {
+      "post": {
+        "tags": ["Auth"],
+        "summary": "Login existing user",
+        "description": "Önceden var olan kullanıcı adı ve şifre ile giriş yapılır. Bu esnada parametre olarak id si verilen halihazırda guest ile kayıtlı kullanıcı silinir.",
+        "operationId": "loginExistingUser",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Bu id login öncesi giriş yapılmış guest usera aittir.",
+            "required": true,
+            "type": "string",
+            "format": "objectId"
+          },
+          {
+            "in": "body",
+            "name": "user",
+            "description": "The user to create.",
+            "schema": {
+              "type": "object",
+              "required": ["email", "password"],
+              "properties": {
+                "email": {
+                  "type": "string"
+                },
+                "password": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "headers": {
+              "x-auth-token": {
+                "type": "string"
+              }
+            },
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/User"
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "token": []
+          }
+        ]
+      }
+    },
+    "/cardends": {
+      "post": {
+        "tags": ["Cardend"],
+        "summary": "Card bitiminde atılacak sorgu",
+        "description": "Kart bitiminde oyun sonrası gerçeklesen post işlemi",
+        "operationId": "cardEnd",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "cardend",
+            "description": "End card post",
+            "schema": {
+              "type": "object",
+              "required": ["user_id", "logCards", "finishedCards"],
+              "properties": {
+                "user_id": {
+                  "type": "string"
+                },
+                "logCards": {
+                  "$ref": "#/definitions/logCards"
+                },
+                "finishedCards": {
+                  "$ref": "#/definitions/finishedC"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "headers": {
+              "x-auth-token": {
+                "type": "string"
+              }
+            },
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Cardend"
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "token": []
+          }
+        ]
+      }
+    },
+    "/challengeends": {
+      "post": {
+        "tags": ["Challengeend"],
+        "summary": "Challenge bitiminde atılacak sorgu",
+        "description": "Challenge bitiminde oyun sonrasi gerceklesen post islemi",
+        "operationId": "challengeEnd",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "challenge",
+            "description": "End challenge post",
+            "schema": {
+              "type": "object",
+              "required": ["user_id", "finishedChallenges"],
+              "properties": {
+                "user_id": {
+                  "type": "string"
+                },
+                "finishedChallenges": {
+                  "$ref": "#/definitions/finishedC"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "headers": {
+              "x-auth-token": {
+                "type": "string"
+              }
+            },
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Challengeend"
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "token": []
+          }
+        ]
+      }
+    }
+  },
+  "securityDefinitions": {
+    "token": {
+      "type": "apiKey",
+      "name": "x-auth-token",
+      "in": "header",
+      "description": "header key:x-auth-token, value:token"
+    }
+  },
+  "definitions": {
+    "x-auth-token": {
+      "type": "object",
+      "properties": {
+        "x-auth-token": {
+          "type": "string"
+        }
+      }
+    },
+    "Topic": {
+      "type": "object",
+      "properties": {
+        "topicId": {
+          "type": "string"
+        },
+        "topicName": {
+          "type": "string"
+        },
+        "topicPic": {
+          "type": "string",
+          "description": "topic svg pic"
+        },
+        "difficulty": {
+          "type": "integer"
+        }
+      }
+    },
+    "Card": {
+      "type": "object",
+      "properties": {
+        "cardId": {
+          "type": "string"
+        },
+        "cardName": {
+          "type": "string"
+        },
+        "cardPic": {
+          "type": "string",
+          "description": "card svg pic"
+        }
+      }
+    },
+    "Avatar": {
+      "type": "object",
+      "properties": {
+        "avatarSvg": {
+          "type": "string"
+        }
+      }
+    },
+    "Video": {
+      "type": "object",
+      "properties": {
+        "topicId": {
+          "type": "string"
+        },
+        "cardId": {
+          "type": "string"
+        },
+        "subjectId": {
+          "type": "string"
+        },
+        "videoId": {
+          "type": "string"
+        },
+        "videoLevel": {
+          "type": "number"
+        },
+        "videoLink": {
+          "type": "string"
+        },
+        "solutionVideoLink": {
+          "type": "string"
+        },
+        "wrongVideoId": {
+          "type": "string"
+        },
+        "correctVideoId": {
+          "type": "string"
+        },
+        "videoQuestion": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "questionVId": {
+                "type": "string"
+              },
+              "question": {
+                "type": "string"
+              },
+              "correctAnswer": {
+                "type": "string"
+              },
+              "wrongAnswer": {
+                "type": "string"
+              },
+              "questionLevel": {
+                "type": "number"
+              },
+              "responseTime": {
+                "type": "number"
+              }
+            }
+          }
+        }
+      }
+    },
+    "Question": {
+      "type": "object",
+      "properties": {
+        "topicId": {
+          "type": "string"
+        },
+        "cardId": {
+          "type": "string"
+        },
+        "subjectId": {
+          "type": "string"
+        },
+        "questionId": {
+          "type": "string"
+        },
+        "questionLevel": {
+          "type": "number"
+        },
+        "responseTime": {
+          "type": "number"
+        },
+        "layoutType": {
+          "type": "number"
+        },
+        "question": {
+          "type": "string"
+        },
+        "semanticQuestion": {
+          "type": "string"
+        },
+        "semanticAnswer": {
+          "type": "string"
+        },
+        "gameTypes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "answers": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "answer": {
+                "type": "string"
+              },
+              "isCorrect": {
+                "type": "boolean"
+              }
+            }
+          }
+        }
+      }
+    },
+    "User": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        },
+        "age": {
+          "type": "string"
+        },
+        "avatar": {
+          "$ref": "#/definitions/Avatar"
+        },
+        "lastOnline": {
+          "type": "string",
+          "format": "date"
+        },
+        "location": {
+          "type": "string"
+        },
+        "isAdmin": {
+          "type": "boolean"
+        },
+        "isGold": {
+          "type": "boolean"
+        },
+        "level": {
+          "type": "number"
+        },
+        "points": {
+          "type": "number"
+        },
+        "coins": {
+          "type": "number"
+        },
+        "gems": {
+          "type": "number"
+        },
+        "keys": {
+          "type": "number"
+        },
+        "tickets": {
+          "type": "number"
+        },
+        "logCards": {
+          "$ref": "#/definitions/logCards"
+        },
+        "finishedCards": {
+          "$ref": "#/definitions/finishedC"
+        },
+        "finishedChallenges": {
+          "$ref": "#/definitions/finishedC"
+        }
+      }
+    },
+    "Cardend": {
+      "type": "object",
+      "properties": {
+        "user_id": {
+          "type": "string"
+        },
+        "logCards": {
+          "$ref": "#/definitions/logCards"
+        },
+        "finishedCards": {
+          "$ref": "#/definitions/finishedC"
+        }
+      }
+    },
+    "Challengeend": {
+      "type": "object",
+      "properties": {
+        "user_id": {
+          "type": "string"
+        },
+        "finishedChallenges": {
+          "$ref": "#/definitions/finishedC"
+        }
+      }
+    },
+    "logCards": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "timeStamp": {
+            "type": "string"
+          },
+          "questionVId": {
+            "type": "string"
+          },
+          "responseTimeOfQuestion": {
+            "type": "number"
+          },
+          "result": {
+            "type": "boolean"
+          }
+        }
+      }
+    },
+    "finishedC": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "topicId": {
+            "type": "string"
+          },
+          "cards": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "cardId": {
+                  "type": "string"
+                },
+                "subjects": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "subjectId": {
+                        "type": "string"
+                      },
+                      "correctInSubject": {
+                        "type": "number"
+                      },
+                      "wrongInSubject": {
+                        "type": "number"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,3 +1,7 @@
-/node_modules
-/rest_client
+/.vscode
 /json
+/rest
+/node_modules
+/models/rest
+/routes/rests
+/startup/routes_.js

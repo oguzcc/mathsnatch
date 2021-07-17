@@ -1,0 +1,20 @@
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MDAzNDc1MGM4MGY0ODJmYTgyYjdkNDUiLCJuYW1lIjoiZ3Vlc3QxNjEwODI3NjAwOTg3IiwiZW1haWwiOiJndWVzdDE2MTA4Mjc2MDA5ODdAbWF0aHNuYXRjaC5jb20iLCJpc0FkbWluIjpmYWxzZSwiaXNHb2xkIjpmYWxzZSwiaWF0IjoxNjEwODI3NjAxfQ.XWuF1gQfD8BQCd0G7kRdHzaDFv721IAY6klLBZNKyp0
+@localhost = http://localhost:3000
+@heroku = mathsnatch.herokuapp.com
+
+@user_id = 60034750c80f482fa82b7d45
+# patch user himself   /api/users/user_id
+# age, location and avatar cannot be empty
+PATCH {{localhost}}/api/users/{{user_id}}
+x-auth-token: {{token}}
+content-type: application/json
+accept: application/json
+
+{
+  "email": "oguzcc@mathsnatch.com",
+  "name": "oguzcc",
+  "password": "123456",
+  "age": 43,
+  "location": "izmir",
+  "avatar": "5e4857455f83cf2170cf781c"
+}

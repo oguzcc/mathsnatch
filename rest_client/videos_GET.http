@@ -1,0 +1,10 @@
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZmNiN2UyOGI4YzlhODAwMDQ5MjZkODEiLCJuYW1lIjoibXVzYW11c2EiLCJlbWFpbCI6Im11c2FtdXNhQGdtYWlsLmNvbSIsImlzQWRtaW4iOnRydWUsImlzR29sZCI6dHJ1ZSwiaWF0IjoxNjA3MjUxNDMxfQ.sjJ7a7v8fKmF6YkvcsClh3OuOxePrlsRiTFzg8bRXG4
+@localhost = http://localhost:3000
+@heroku = mathsnatch.herokuapp.com
+
+
+# get all videos   /api/videos
+GET {{heroku}}/api/videos
+x-auth-token: {{token}}
+content-type: application/json
+accept: application/json

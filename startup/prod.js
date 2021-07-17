@@ -1,8 +1,8 @@
-const helmet = require("helmet");
-const compression = require("compression");
+const helmet = require('helmet');
+const compression = require('compression');
 //const rateLimit = require("express-rate-limit");
 
-module.exports = function(app) {
+module.exports = function (app) {
   /*   const guestLimiter = rateLimit({
     windowMs: 60 * 60 * 1000, // 1 hour window
     max: 2, // start blocking after 2 requests

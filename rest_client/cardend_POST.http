@@ -1,0 +1,30 @@
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZmNiN2UyOGI4YzlhODAwMDQ5MjZkODEiLCJuYW1lIjoibXVzYW11c2EiLCJlbWFpbCI6Im11c2FtdXNhQGdtYWlsLmNvbSIsImlzQWRtaW4iOnRydWUsImlzR29sZCI6dHJ1ZSwiaWF0IjoxNjA3MjUxNDMxfQ.sjJ7a7v8fKmF6YkvcsClh3OuOxePrlsRiTFzg8bRXG4
+@localhost = http://localhost:3000
+@heroku = mathsnatch.herokuapp.com
+
+
+
+@user_id = 5fcb7e28b8c9a80004926d81
+@topicId = 221
+@cardId = 221
+
+# post cardend   /api/cardends
+POST {{localhost}}/api/cardends
+x-auth-token: {{token}}
+content-type: application/json
+accept: application/json
+
+{
+    "user_id": "{{user_id}}",
+    "finishedCards": [
+        {"topicId": "{{topicId}}",
+        "cards": 
+            [
+                {"cardId": "{{cardId}}",
+                 "correctInCard": 3,
+                 "wrongInCard": 2
+                }
+            ]
+        }
+    ]
+}

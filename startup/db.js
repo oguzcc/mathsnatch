@@ -1,5 +1,5 @@
-const winston = require("winston");
-const mongoose = require("mongoose");
+const winston = require('winston');
+const mongoose = require('mongoose');
 
 module.exports = function () {
   mongoose
@@ -12,5 +12,5 @@ module.exports = function () {
     .then(() => winston.info(`Connected to 3000...`));
 };
 
-// "mongodb://localhost:27017/mathsnatchDb"
+// 'mongodb://localhost:27017/mathDb'
 // process.env.DB_URL
