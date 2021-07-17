@@ -1,8 +1,0 @@
-@localhost = http://localhost:3000
-@heroku = mathsnatch.herokuapp.com
-
-
-# create new guest user  /api/auth/guest
-GET {{localhost}}/api/auth/guest
-content-type: application/json
-accept: application/json

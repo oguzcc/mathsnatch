@@ -7,9 +7,9 @@ const _ = require('lodash');
 const express = require('express');
 const router = express.Router();
 
-router.get('/', [auth, cache], async (req, res) => {
+router.get('/', [auth], async (req, res) => {
   const avatars = await Avatar.find();
-  client.set('avatars', JSON.stringify(avatars), 'EX', 3600 * 24 * 7);
+  // client.set('avatars', JSON.stringify(avatars), 'EX', 3600 * 24 * 7);
 
   res.send(avatars);
 });

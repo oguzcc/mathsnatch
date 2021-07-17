@@ -67,10 +67,7 @@
             "in": "query",
             "description": "Get topics by query",
             "required": false,
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
+            "type": "string",
             "collectionFormat": "multi"
           }
         ],
@@ -105,10 +102,7 @@
             "in": "query",
             "description": "Get cards by query",
             "required": false,
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
+            "type": "string",
             "collectionFormat": "multi"
           }
         ],
@@ -168,10 +162,7 @@
             "in": "query",
             "description": "Get videos by videoId",
             "required": false,
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
+            "type": "string",
             "collectionFormat": "multi"
           },
           {
@@ -179,10 +170,7 @@
             "in": "query",
             "description": "Get videos by subjectId",
             "required": false,
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
+            "type": "string",
             "collectionFormat": "multi"
           },
           {
@@ -190,10 +178,7 @@
             "in": "query",
             "description": "Get videos by cardId",
             "required": false,
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
+            "type": "string",
             "collectionFormat": "multi"
           }
         ],
@@ -219,7 +204,7 @@
       "get": {
         "tags": ["Question"],
         "summary": "Tüm questionlar ya da query ile istenilen questionlar",
-        "description": "Questionlarin tümünü çeker. Query ile istenilen question da çekilebilir",
+        "description": "Questionlarin tümünü çeker. subjectId ya da cardId ile istenilen questionlar da çekilebilir",
         "operationId": "getQuestionsBySubjectId",
         "produces": ["application/json"],
         "parameters": [
@@ -228,10 +213,7 @@
             "in": "query",
             "description": "Get questions by subjectId",
             "required": false,
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
+            "type": "string",
             "collectionFormat": "multi"
           },
           {
@@ -239,10 +221,7 @@
             "in": "query",
             "description": "Get questions by cardId",
             "required": false,
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
+            "type": "string",
             "collectionFormat": "multi"
           }
         ],
@@ -358,7 +337,7 @@
                   "type": "number"
                 },
                 "avatar": {
-                  "type": "string"
+                  "$ref": "#/definitions/Avatar"
                 },
                 "location": {
                   "type": "string"
