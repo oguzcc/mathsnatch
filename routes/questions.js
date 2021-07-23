@@ -98,17 +98,6 @@ router.post('/', [auth, admin], async (req, res) => {
   res.send(question);
 });
 
-router.patch('/', [auth, admin], async (req, res) => {
-  const allQuestions = Question.find();
-  let arrayQuestions = [];
-
-  for (let index = 0; index < 678; index++) {
-    let question = allQuestions[index];
-    question['questionType'] = 'svg';
-    await question.save();
-  }
-});
-
 router.delete('/:subjectId', [auth, admin], async (req, res) => {
   const question = await Question.deleteMany({
     subjectId: req.params.subjectId,
