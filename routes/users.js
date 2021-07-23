@@ -1,3 +1,4 @@
+const Joi = require('joi');
 const auth = require('../middleware/auth');
 const bcrypt = require('bcrypt');
 const { client } = require('../startup/redis_client');
@@ -111,6 +112,22 @@ router.get('/me', [auth], async (req, res) => {
     .send(_.pick(user, ["_id", "name", "email", "isAdmin", "isGold"]));
 }); */
 
+router.post('/', [auth], async (req, res) => {
+  const { error } = validateAuth(req.body);
+  if (error) return res.status(400).send(error.details[0].message);
+
+  let user = await User.findOne({ email: req.body.email });
+  if (!user) return res.status(400).send('Invalid email.');
+
+  const validPassword = await bcrypt.compare(req.body.password, user.password);
+  if (!validPassword) return res.status(400).send('Invalid password.');
+
+  await User.findByIdAndRemove(req.user._id);
+
+  const token = user.generateAuthToken();
+  res.header('x-auth-token', token).send(token);
+});
+
 router.patch('/:id', [auth, validateObjectId], async (req, res) => {
   if (req.user._id !== req.params.id)
     return res.status(401).send('Access denied');
@@ -154,5 +171,14 @@ router.patch('/:id', [auth, validateObjectId], async (req, res) => {
   const token = result.generateAuthToken();
   res.header('x-auth-token', token).send(_.pick(result, ['_id']));
 });
+
+function validateAuth(req) {
+  const schema = {
+    email: Joi.string().min(5).max(255).required().email(),
+    password: Joi.string().min(5).max(255).required(),
+  };
+
+  return Joi.validate(req, schema);
+}
 
 module.exports = router;

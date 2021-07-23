@@ -266,6 +266,54 @@
             "token": []
           }
         ]
+      },
+      "post": {
+        "tags": ["User"],
+        "summary": "Login existing user",
+        "description": "Önceden var olan kullanıcı adı ve şifre ile giriş yapılır. Bu esnada halihazırdaki guest ile kayıtlı kullanıcı silinir.",
+        "operationId": "loginExistingUser",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "login",
+            "description": "Existing user info",
+            "schema": {
+              "type": "object",
+              "required": ["email", "password"],
+              "properties": {
+                "email": {
+                  "type": "string"
+                },
+                "password": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "headers": {
+              "x-auth-token": {
+                "type": "string"
+              }
+            },
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/User"
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "token": []
+          }
+        ]
       }
     },
     "/users/me": {
@@ -389,64 +437,6 @@
             }
           }
         }
-      }
-    },
-    "/auth/{id}": {
-      "post": {
-        "tags": ["Auth"],
-        "summary": "Login existing user",
-        "description": "Önceden var olan kullanıcı adı ve şifre ile giriş yapılır. Bu esnada parametre olarak id si verilen halihazırda guest ile kayıtlı kullanıcı silinir.",
-        "operationId": "loginExistingUser",
-        "consumes": ["application/json"],
-        "produces": ["application/json"],
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "description": "Bu id login öncesi giriş yapılmış guest usera aittir.",
-            "required": true,
-            "type": "string",
-            "format": "objectId"
-          },
-          {
-            "in": "body",
-            "name": "user",
-            "description": "The user to create.",
-            "schema": {
-              "type": "object",
-              "required": ["email", "password"],
-              "properties": {
-                "email": {
-                  "type": "string"
-                },
-                "password": {
-                  "type": "string"
-                }
-              }
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "successful operation",
-            "headers": {
-              "x-auth-token": {
-                "type": "string"
-              }
-            },
-            "schema": {
-              "type": "array",
-              "items": {
-                "$ref": "#/definitions/User"
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "token": []
-          }
-        ]
       }
     },
     "/cardends": {
