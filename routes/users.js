@@ -163,7 +163,7 @@ router.patch('/:id', [auth, validateObjectId], async (req, res) => {
         avatar: req.body.avatar,
         location: req.body.location,
         lastOnline: Date.now(),
-        userType: req.body.userType,
+        userType: 'registered',
       },
     },
     { new: true }
