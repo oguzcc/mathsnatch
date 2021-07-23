@@ -33,6 +33,7 @@ router.get('/', [auth], async (req, res) => {
         question: 1,
         semanticQuestion: 1,
         semanticAnswer: 1,
+        questionType: 1,
         gameTypes: 1,
         'answers.answer': 1,
         'answers.isCorrect': 1,
@@ -86,6 +87,7 @@ router.post('/', [auth, admin], async (req, res) => {
       'question',
       'semanticQuestion',
       'semanticAnswer',
+      'questionType',
       'gameTypes',
       'answers',
     ])
@@ -94,6 +96,17 @@ router.post('/', [auth, admin], async (req, res) => {
   await question.save();
 
   res.send(question);
+});
+
+router.patch('/', [auth, admin], async (req, res) => {
+  const allQuestions = Question.find();
+  let arrayQuestions = [];
+
+  for (let index = 0; index < 678; index++) {
+    let question = allQuestions[index];
+    question['questionType'] = 'svg';
+    await question.save();
+  }
 });
 
 router.delete('/:subjectId', [auth, admin], async (req, res) => {

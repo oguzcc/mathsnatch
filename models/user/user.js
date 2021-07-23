@@ -57,9 +57,8 @@ const userSchema = new mongoose.Schema({
     type: Boolean,
     default: false,
   },
-  isGold: {
-    type: Boolean,
-    default: false,
+  userType: {
+    type: String,
   },
   level: {
     type: Number,
@@ -121,7 +120,7 @@ function validateUser(user) {
     avatar: Joi.string(),
     location: Joi.string(),
     isAdmin: Joi.boolean(),
-    isGold: Joi.boolean(),
+    userType: Joi.string(),
     level: Joi.number().min(0),
     points: Joi.number().min(0),
     coins: Joi.number().min(0),

@@ -9,6 +9,10 @@ const questionsSSchema = new mongoose.Schema({
     max: 8,
     requried: true,
   },
+  questionType: {
+    type: String,
+    required: true,
+  },
   question: {
     type: String,
     required: true,
@@ -35,6 +39,7 @@ const questionsSSchema = new mongoose.Schema({
 function validateQuestionsS(questionsS) {
   const schema = {
     questionId: Joi.string().min(8).max(8).required(),
+    questionType: Joi.string().required(),
     question: Joi.string().required(),
     correctAnswer: Joi.string().required(),
     wrongAnswer: Joi.string().required(),

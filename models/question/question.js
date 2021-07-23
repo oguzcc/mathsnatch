@@ -54,6 +54,9 @@ const questionSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  questionType: {
+    type: String,
+  },
   gameTypes: [String],
   answers: [answerSchema],
 });
@@ -72,6 +75,7 @@ function validateQuestion(question) {
     question: Joi.string().required(),
     semanticQuestion: Joi.string().required(),
     semanticAnswer: Joi.string().required(),
+    questionType: Joi.string().required(),
     gameTypes: Joi.array().required(),
     answers: Joi.array().required(),
   };
