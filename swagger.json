@@ -266,7 +266,9 @@
             "token": []
           }
         ]
-      },
+      }
+    },
+    "/users/login": {
       "post": {
         "tags": ["User"],
         "summary": "Login existing user",
@@ -302,10 +304,7 @@
               }
             },
             "schema": {
-              "type": "array",
-              "items": {
-                "$ref": "#/definitions/User"
-              }
+              "$ref": "#/definitions/User"
             }
           }
         },
@@ -327,10 +326,7 @@
           "200": {
             "description": "successful operation",
             "schema": {
-              "type": "array",
-              "items": {
-                "$ref": "#/definitions/User"
-              }
+              "$ref": "#/definitions/User"
             }
           }
         },
@@ -430,10 +426,7 @@
             },
             "description": "successful operation",
             "schema": {
-              "type": "array",
-              "items": {
-                "$ref": "#/definitions/User"
-              }
+              "$ref": "#/definitions/User"
             }
           }
         }
@@ -528,10 +521,7 @@
               }
             },
             "schema": {
-              "type": "array",
-              "items": {
-                "$ref": "#/definitions/Challengeend"
-              }
+              "$ref": "#/definitions/Challengeend"
             }
           }
         },

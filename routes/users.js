@@ -112,7 +112,7 @@ router.get('/me', [auth], async (req, res) => {
     .send(_.pick(user, ["_id", "name", "email", "isAdmin", "isGold"]));
 }); */
 
-router.post('/', [auth], async (req, res) => {
+router.post('/login', [auth], async (req, res) => {
   const { error } = validateAuth(req.body);
   if (error) return res.status(400).send(error.details[0].message);
 
@@ -125,7 +125,7 @@ router.post('/', [auth], async (req, res) => {
   await User.findByIdAndRemove(req.user._id);
 
   const token = user.generateAuthToken();
-  res.header('x-auth-token', token).send(token);
+  res.header('x-auth-token', token).send();
 });
 
 router.patch('/:id', [auth, validateObjectId], async (req, res) => {
