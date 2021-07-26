@@ -455,9 +455,6 @@
                 },
                 "age": {
                   "type": "integer"
-                },
-                "avatar": {
-                  "$ref": "#/definitions/Avatar"
                 }
               }
             }
