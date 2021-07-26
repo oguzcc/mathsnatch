@@ -57,7 +57,7 @@ router.post('/register', async (req, res) => {
     email: req.body.email,
     password: password,
     age: req.body.age,
-    avatar: req.body.avatar,
+    avatar: '5e446b6a9608ec4934a599ef',
     location: req.body.location,
     lastOnline: Date.now(),
     userType: 'registered',
