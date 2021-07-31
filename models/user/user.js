@@ -102,7 +102,7 @@ userSchema.methods.generateAuthToken = function () {
       name: this.name,
       email: this.email,
       isAdmin: this.isAdmin,
-      isGold: this.isGold,
+      userType: this.userType,
     },
     process.env.DB_URL
   );
