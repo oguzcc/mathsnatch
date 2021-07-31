@@ -141,12 +141,16 @@ router.patch('/:id', [auth, validateObjectId], async (req, res) => {
 
   user = {};
   user = await User.findOne({ name: req.body.name });
-  if (user && user.name === req.body.name)
+  if (user && user.name === req.body.name && req.user.name !== req.body.name)
     return res.status(400).send('This user name is already in use.');
 
   user = {};
   user = await User.findOne({ email: req.body.email });
-  if (user && user.email === req.body.email)
+  if (
+    user &&
+    user.email === req.body.email &&
+    req.user.email !== req.body.email
+  )
     return res.status(400).send('This email is already in use.');
 
   const salt = await bcrypt.genSalt(10);
@@ -159,9 +163,12 @@ router.patch('/:id', [auth, validateObjectId], async (req, res) => {
         name: req.body.name,
         email: req.body.email,
         password: password,
-        age: req.body.age,
-        avatar: req.body.avatar,
-        location: req.body.location,
+        age: req.body.age == null ? 12 : req.body.age,
+        avatar:
+          req.body.avatar == null
+            ? '5e446b6a9608ec4934a599ef'
+            : req.body.avatar,
+        location: req.body.location == null ? 'istanbul' : req.body.location,
         lastOnline: Date.now(),
         userType: 'registered',
       },
